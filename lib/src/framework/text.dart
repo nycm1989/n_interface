@@ -12,10 +12,10 @@ enum _Type {
 }
 
 class NText extends StatelessWidget {
-  final BuildContext          context;
-  final String                text;
-  final double                size;
-  final FontWeight            weight;
+  final BuildContext context;
+  final String text;
+  final double size;
+  final FontWeight   weight;
   final Color               ? color;
   final TextAlign           ? align;
   final TextOverflow        ? overflow;
@@ -46,7 +46,7 @@ class NText extends StatelessWidget {
   const NText.bold({
     required this.context,
     required this.text,
-    this.size     = 12,
+    this.size = 12,
     this.color,
     this.margin,
     this.align,
@@ -57,13 +57,13 @@ class NText extends StatelessWidget {
     this.maxLines,
     super.key
   }):
-  _type   = .bold,
-  weight  = .w500;
+  _type  = .bold,
+  weight = .w500;
 
   const NText.button({
     required this.context,
     required this.text,
-    this.size     = 12,
+    this.size = 12,
     this.margin,
     this.align,
     this.overflow,
@@ -74,8 +74,8 @@ class NText extends StatelessWidget {
     this.maxLines,
     super.key
   }):
-  _type   = .button,
-  weight  = .w500;
+  _type  = .button,
+  weight = .w500;
 
   @override
   Widget build(BuildContext context) =>
@@ -89,17 +89,17 @@ class NText extends StatelessWidget {
       maxLines  : maxLines,
       style     :
       TextStyle(
-        color     : color ?? (
+        color : color ?? (
           _type == .normal  ? context.textColor     :
           _type == .bold    ? context.textBoldColor :
           _type == .button  ? context.mainColor     :
           null
         ),
-        fontStyle : style,
-        fontSize  : size,
-        fontWeight: weight,
-        decoration: decoration,
-        shadows   : shadow == null ? null : [shadow!]
+        fontStyle  : style,
+        fontSize   : size,
+        fontWeight : weight,
+        decoration : decoration,
+        shadows    : shadow == null ? null : [shadow!]
       ),
     )
   );

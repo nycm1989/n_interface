@@ -8,13 +8,13 @@ import 'axis_layout.dart' show NAxisLayout;
 class NTextField extends NAxisLayout {
 
   static OutlineInputBorder get _errorBorder => OutlineInputBorder(
-    borderSide	 : BorderSide(color: Colors.red),
+    borderSide   : BorderSide(color: Colors.red),
     borderRadius : BorderRadius.circular(10),
   );
 
   NTextField({
-    super.axis        = .vertical,
-    super.isRequired  = false,
+    super.axis = .vertical,
+    super.isRequired = false,
     super.action,
     super.title,
     super.overflow,
@@ -24,15 +24,15 @@ class NTextField extends NAxisLayout {
     super.margin,
     super.key,
     //--------------------------------------------
-    bool      isNDropdown  = false,
-    bool      enable      = true,
+    bool      isNDropdown = false,
+    bool      enable = true,
     bool      readOnly    = false,
     bool      obscureText = false,
     bool      bounded     = false,
     bool      showLength  = false,
     bool      hasError    = false,
-    TextAlign align       = .start,
-    int       ? maxLines    = 1,
+    TextAlign align  = .start,
+    int       ? maxLines  = 1,
     int       minLines    = 1,
     //--------------------------------------------
     Color                 ? color,
@@ -50,22 +50,22 @@ class NTextField extends NAxisLayout {
     List<TextInputFormatter> ? inputFormatters,
     String                ? fontFamily = '',
   }) : super (
-    child   :
+    child :
     Form(
       key   : controller?.validator?.key,
       child :
       TextFormField(
-        showCursor: !isNDropdown,
-        focusNode : controller?.focusNode,
-        maxLines  : maxLines,
-        minLines  : minLines,
-        maxLength : maxLength,
-        style     :
+        showCursor   : !isNDropdown,
+        focusNode    : controller?.focusNode,
+        maxLines     : maxLines,
+        minLines     : minLines,
+        maxLength    : maxLength,
+        style   :
         textStyle ?? TextStyle(
-          fontSize: 12,
-          color   : textColor
+          fontSize : 12,
+          color    : textColor
         ),
-        onChanged         : (text) {
+        onChanged    : (text) {
           onChanged?.call(text);
           controller != null
           ? controller.validator != null
@@ -73,7 +73,7 @@ class NTextField extends NAxisLayout {
             : true
           : true;
         },
-        validator         : (text) {
+        validator    : (text) {
           if(controller != null){
             if(controller.validator != null){
               if (!isRequired && (text == null || text.isEmpty)) return null;
@@ -90,37 +90,37 @@ class NTextField extends NAxisLayout {
         type == .number   ? [ CustomNumberFormatter(Patterns.fiatFormat ), ...?inputFormatters ] :
         type == .datetime ? [ FilteringTextInputFormatter.allow(Patterns.dateTime ), ...?inputFormatters ] :
         inputFormatters,
-        keyboardType      : type == .none ? null : type,
-        controller        : controller,
-        readOnly          : readOnly,
-        enabled           : isNDropdown ? false : enable,
-        textAlign         : align,
-        obscureText       : obscureText,
+        keyboardType : type == .none ? null : type,
+        controller   : controller,
+        readOnly     : readOnly,
+        enabled : isNDropdown ? false : enable,
+        textAlign    : align,
+        obscureText  : obscureText,
         textInputAction   : .send,
         textAlignVertical : .center,
-        cursorWidth       : 0.5,
-        decoration        :
+        cursorWidth  : 0.5,
+        decoration   :
         InputDecoration(
-          border        : hasError ? _errorBorder : null,
-          enabledBorder : hasError ? _errorBorder : null,
-          focusedBorder : hasError ? _errorBorder : null,
-          errorMaxLines : 6,
-          errorStyle    :
+          border    : hasError ? _errorBorder : null,
+          enabledBorder  : hasError ? _errorBorder : null,
+          focusedBorder  : hasError ? _errorBorder : null,
+          errorMaxLines  : 6,
+          errorStyle     :
           TextStyle(
-            fontFamily  : fontFamily ?? 'Poppins',
-            fontSize    : controller?.validator?.error != null ? 12 : 0,
-            color       : Colors.red
+            fontFamily : fontFamily ?? 'Poppins',
+            fontSize   : controller?.validator?.error != null ? 12 : 0,
+            color : Colors.red
           ),
-          fillColor           : !isNDropdown ? null :  WidgetStateColor.resolveWith((states) {
+          fillColor : !isNDropdown ? null :  WidgetStateColor.resolveWith((states) {
             if (states.contains(WidgetState.disabled)) return Colors.white;
             return Colors.white;
           }),
-          counterText   : showLength ? null : "",
-          isCollapsed   : true,
-          hintText      : hint != "" ? hint : null,
-          prefixIcon    : prefix ?? const TextFieldAction.prefix(margin: .only(left: 5)),
-          suffixIcon    : suffix ?? const TextFieldAction.suffix(margin: .only(left: 5)),
-          contentPadding: const EdgeInsets.symmetric( vertical: 12, horizontal: 16 ),
+          counterText    : showLength ? null : "",
+          isCollapsed    : true,
+          hintText  : hint != "" ? hint : null,
+          prefixIcon     : prefix ?? const TextFieldAction.prefix(margin: .only(left: 5)),
+          suffixIcon     : suffix ?? const TextFieldAction.suffix(margin: .only(left: 5)),
+          contentPadding : const EdgeInsets.symmetric( vertical: 12, horizontal: 16 ),
           suffixIconConstraints : const BoxConstraints( maxHeight : 30, minHeight : 30 ),
           prefixIconConstraints : const BoxConstraints( maxHeight : 30, minHeight : 30 ),
         ),
@@ -139,7 +139,7 @@ class CustomNumberFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue
   ) {
-    final newText = newValue.text;
+    final String newText = newValue.text;
 
     if (newText.isEmpty) return newValue;
     if (allowedPattern.hasMatch(newText)) return newValue;
@@ -190,10 +190,10 @@ class _TextFieldAction extends StatefulWidget {
   final String      ? text;
   final IconData    ? icon;
   final Color       ? textColor;
-  final double        iconSize;
+  final double iconSize;
   final _ActionType   type;
   final FontWeight  ? weight;
-  final EdgeInsetsGeometry?  margin;
+  final EdgeInsetsGeometry? margin;
   const _TextFieldAction({
     this.asset,
     this.text,
@@ -201,7 +201,7 @@ class _TextFieldAction extends StatefulWidget {
     this.textColor,
     this.margin,
     this.iconSize = 17,
-    this.type = .prefix,
+    this.type     = .prefix,
     this.onTap,
     this.weight,
     super.key
@@ -242,12 +242,12 @@ class __TextFieldActionState extends State<_TextFieldAction> {
       cursor  : widget.onTap != null ? SystemMouseCursors.click: MouseCursor.uncontrolled,
       onEnter : widget.onTap != null ? (event) => setState(() => over = !over) : null,
       onExit  : widget.onTap != null ? (event) => setState(() => over = !over) : null,
-      child:
+      child   :
       Padding(
         padding : widget.margin ?? .zero,
         child   :
         GestureDetector(
-          onTap: () async {
+          onTap : () async {
             if(widget.onTap is Future<void> Function()){
               streamController = StreamController<bool>();
               setState(()=> streamController?.add(true));
@@ -271,7 +271,7 @@ class __TextFieldActionState extends State<_TextFieldAction> {
               widget.onTap?.call();
             }
           },
-          child:
+          child :
           StreamBuilder<bool>(
             stream  : streamController?.stream,
             builder : (context, snapshot) =>
@@ -280,11 +280,11 @@ class __TextFieldActionState extends State<_TextFieldAction> {
               children     : [
                 if(widget.type == .prefix && widget.asset != null)
                 _AssetIconContainer(
-                  iconSize        : widget.iconSize,
-                  asset           : widget.asset,
-                  icon            : widget.icon,
+                  iconSize  : widget.iconSize,
+                  asset     : widget.asset,
+                  icon : widget.icon,
                   connectionState : snapshot.connectionState,
-                  loadColor       : widget.textColor,
+                  loadColor : widget.textColor,
                 ),
                 if(widget.text != null)
                 Padding(
@@ -296,20 +296,20 @@ class __TextFieldActionState extends State<_TextFieldAction> {
                   child   :
                   Text(
                     widget.text!,
-                    style:
+                    style :
                     TextStyle(
-                      fontWeight: widget.weight,
-                      color     : widget.textColor ?? Colors.grey.shade700
+                      fontWeight : widget.weight,
+                      color : widget.textColor ?? Colors.grey.shade700
                     ),
                   ),
                 ),
                 if(widget.type == .suffix && (widget.asset != null || widget.icon != null))
                 _AssetIconContainer(
-                  asset           : widget.asset,
-                  icon            : widget.icon,
-                  iconSize        : widget.iconSize,
+                  asset     : widget.asset,
+                  icon : widget.icon,
+                  iconSize  : widget.iconSize,
                   connectionState : snapshot.connectionState,
-                  loadColor       : widget.textColor,
+                  loadColor : widget.textColor,
                 )
               ]
             )
@@ -321,10 +321,10 @@ class __TextFieldActionState extends State<_TextFieldAction> {
 }
 
 class _AssetIconContainer extends StatelessWidget {
-  final String    ? asset;
-  final IconData  ? icon;
-  final Color     ? loadColor;
-  final double      iconSize;
+  final String    ?     asset;
+  final IconData  ?     icon;
+  final Color     ?     loadColor;
+  final double iconSize;
   final ConnectionState connectionState;
   const _AssetIconContainer({
     required this.asset,
@@ -337,16 +337,19 @@ class _AssetIconContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width   : iconSize,
-      height  : iconSize,
-      margin  : const .symmetric(horizontal: 5),
-      child   : [ConnectionState.none, ConnectionState.done].contains(connectionState)
+      width  : iconSize,
+      height : iconSize,
+      margin : const .symmetric(horizontal: 5),
+      child  : [ConnectionState.none, ConnectionState.done].contains(connectionState)
       ? asset != null
         ? Image.asset(asset!)
-        : Icon(icon, color: context.textColor, size: 17)
+        : Icon(icon,
+          color : context.textColor,
+          size  : 17,
+        )
       : CircularProgressIndicator(
-        strokeWidth: 1,
-        color: loadColor ?? Colors.grey
+        strokeWidth : 1,
+        color : loadColor ?? Colors.grey
       )
     );
   }
@@ -356,7 +359,10 @@ class _AssetIconContainer extends StatelessWidget {
 class NTextController extends TextEditingController{
   TextFieldValidator? validator;
   final FocusNode focusNode = FocusNode();
-  NTextController({ super.text, this.validator });
+  NTextController({
+    super.text,
+    this.validator,
+  });
 
   TextFieldValidator changeValidator(TextFieldValidator validator) => this.validator = validator;
   void focus(BuildContext context) => FocusScope.of(context).requestFocus(focusNode);
@@ -372,25 +378,58 @@ class TextFieldValidator{
   TextFieldValidator({ required this.key });
 
   // Validadores predefinidos como métodos estáticos
-  TextFieldValidator.email   ({ required this.key, this.error }) : regExp = Patterns.email;
-  TextFieldValidator.number  ({ required this.key, this.error }) : regExp = Patterns.dotNumber;
-  TextFieldValidator.notEmpty({ required this.key, this.error }) : regExp = Patterns.notEmpty;
-  TextFieldValidator.dateTime({ required this.key, this.error }) : regExp = Patterns.dateTime;
-  TextFieldValidator.coords  ({ required this.key, this.error }) : regExp = Patterns.coords;
-  TextFieldValidator.phonenumber({ required this.key, this.error }) : regExp = Patterns.phonenumber;
-  TextFieldValidator.superonlytextspaces({ required this.key, this.error }) : regExp = Patterns.superonlytextspaces;
-  TextFieldValidator.superonlytextwithoutspaces({ required this.key, this.error }) : regExp = Patterns.superonlytextwithoutspaces;
-  TextFieldValidator.alphanumericwithoutexpressions({ required this.key, this.error }) : regExp = Patterns.alphanumericwithoutexpressions;
+  TextFieldValidator.email({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.email;
+  TextFieldValidator.number({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.dotNumber;
+  TextFieldValidator.notEmpty({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.notEmpty;
+  TextFieldValidator.dateTime({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.dateTime;
+  TextFieldValidator.coords({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.coords;
+  TextFieldValidator.phonenumber({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.phonenumber;
+  TextFieldValidator.superonlytextspaces({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.superonlytextspaces;
+  TextFieldValidator.superonlytextwithoutspaces({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.superonlytextwithoutspaces;
+  TextFieldValidator.alphanumericwithoutexpressions({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.alphanumericwithoutexpressions;
 
   // Validación personalizada basada en expresión regular proporcionada por el usuario
-  TextFieldValidator.pattern ({ required this.key, this.error, required String pattern }) :
-    regExp = RegExp(pattern, unicode: true);
+  TextFieldValidator.pattern({
+    required this.key,
+    this.error,
+    required String pattern,
+  }) : regExp = RegExp(pattern, unicode: true);
 
 
-  TextFieldValidator.maximum({ required this.key, this.error, required num max }) :
-  function = ((text) {
+  TextFieldValidator.maximum({
+    required this.key,
+    this.error,
+    required num max,
+  }) : function = ((text) {
     if (text.isEmpty) return true;
-    final n = num.tryParse(text);
+    final num? n = num.tryParse(text);
     if (n == null) return false;
     return n <= max;
   });
@@ -405,7 +444,7 @@ class TextFieldValidator{
   function = ((text) {
     if (text.isEmpty) return false;
 
-    final n = num.tryParse(text);
+    final num? n = num.tryParse(text);
     if (n == null) return false;
 
     // 🔴 BLOQUEO DE RANGO INVÁLIDO
@@ -419,11 +458,17 @@ class TextFieldValidator{
 
 
 
-  TextFieldValidator.regExp({ required this.key, this.error, required this.regExp });
+  TextFieldValidator.regExp({
+    required this.key,
+    this.error,
+    required this.regExp,
+  });
 
 
-  TextFieldValidator.numbersAndLetters({ required this.key, this.error}) :
-    regExp = Patterns.numbersAndLetters;
+  TextFieldValidator.numbersAndLetters({
+    required this.key,
+    this.error,
+  }) : regExp = Patterns.numbersAndLetters;
 
 
   TextFieldValidator.length({
@@ -451,7 +496,7 @@ class TextFieldValidator{
 
   void updateFunction({ Function(String text)? function }) {
     this.function = function;
-    regExp        = null;
+    regExp = null;
   }
 
 
@@ -473,9 +518,9 @@ class TextFieldValidator{
     if (text?.isEmpty ?? false) return true;
 
     if(dinamic != null) {
-      this.dinamic  = dinamic;
-      function      = null;
-      regExp        = null;
+      this.dinamic = dinamic;
+      function     = null;
+      regExp = null;
     }
 
     return key.currentState?.validate()??false;
@@ -501,7 +546,7 @@ class Patterns {
 
 
   static RegExp length({ required num length }) {
-    final pattern = r'^\d{' + length.toInt().toString() + r'}$';
+    final String pattern = r'^\d{' + length.toInt().toString() + r'}$';
     return RegExp(pattern);
   }
 

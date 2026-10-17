@@ -6,7 +6,7 @@ responsive, theme-aware interfaces with a consistent look and feel.
 Every public API is exported from a single entry point:
 
 ```dart
-import 'package:n_interface/n_interface_helper.dart';
+import 'package:n_interface/n_interface.dart';
 ```
 
 ## Table of contents

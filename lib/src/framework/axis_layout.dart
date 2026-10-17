@@ -8,16 +8,16 @@ import 'text.dart' show NText;
 /// Si [axis] es horizontal es un [Row]
 /// Si [axis] es vertical es un [Column]
 class NAxisLayout extends StatelessWidget {
-  final Axis axis;
-  final Widget child;
+  final Axis    axis;
+  final Widget  child;
   final Widget? action;
   final String? title;
   final TextOverflow? overflow;
   final double? width;
   final double? height;
-  final FontWeight? weight;
-  final bool isRequired;
-  final Alignment? alignment;
+  final FontWeight?   weight;
+  final bool    isRequired;
+  final Alignment?    alignment;
   final EdgeInsetsGeometry? margin;
 
   const NAxisLayout({
@@ -38,31 +38,31 @@ class NAxisLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
   Container(
-    margin  : margin ?? .zero,
-    height  : height,
-    child   :
+    margin : margin ?? .zero,
+    height : height,
+    child  :
     Column(
-      mainAxisSize      : .min,
-      crossAxisAlignment: .end,
-      spacing           : 5,
-      children          : [
+      mainAxisSize : .min,
+      crossAxisAlignment : .end,
+      spacing : 5,
+      children     : [
         if(axis == .horizontal) ?action,
         Flex(
-          direction           : axis,
-          mainAxisSize        : .min,
-          crossAxisAlignment  : axis == .horizontal ? .center : .start,
-          spacing             : axis == .horizontal ? 10 : 0,
-          children            : [
+          direction    : axis,
+          mainAxisSize : .min,
+          crossAxisAlignment : axis == .horizontal ? .center : .start,
+          spacing : axis == .horizontal ? 10 : 0,
+          children     : [
             if(title != null)
             NFlexibleBox(
-              expandWhen: axis == .horizontal,
-              child     :
+              expandWhen : axis == .horizontal,
+              child :
               SizedBox(
-                width: axis == .vertical ? width : null,
-                child:
+                width : axis == .vertical ? width : null,
+                child :
                 Row(
-                  spacing : 5,
-                  children: [
+                  spacing  : 5,
+                  children : [
                     if(isRequired)
                     NText(
                       context : context,
@@ -71,18 +71,18 @@ class NAxisLayout extends StatelessWidget {
                       color   : context.mainColor
                     ),
                     Expanded(
-                      child:
+                      child :
                       Padding(
                         padding : const .only(bottom: 5),
                         child   :
                         NText(
-                          context : context,
-                          text    : title!,
-                          weight  : weight ?? .w400,
-                          overflow: overflow ?? .clip,
+                          context  : context,
+                          text     : title!,
+                          weight   : weight ?? .w400,
+                          overflow : overflow ?? .clip,
                           // Con ellipsis el título se limita a 1 línea (no envuelve ni
                           // crece en altura); sin ella, comportamiento original.
-                          maxLines: overflow == TextOverflow.ellipsis ? 1 : null,
+                          maxLines : overflow == TextOverflow.ellipsis ? 1 : null,
                         ),
                       ),
                     ),
@@ -92,8 +92,8 @@ class NAxisLayout extends StatelessWidget {
               ),
             ),
             NFlexibleBox(
-              expandWhen: axis == .horizontal,
-              child     :
+              expandWhen : axis == .horizontal,
+              child :
               Align(
                 alignment : width != null ? .centerLeft : .center,
                 child     :

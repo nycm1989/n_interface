@@ -9,7 +9,7 @@ import 'package:n_interface/src/framework/text.dart' show NText;
 class CreateDialog {
   static Future<void>? make( BuildContext context, {
     Future<void> Function()? onLoading,
-    String title = "",
+    String title    = "",
     required Widget child,
     double? modalHeight,
     double? dialogHeight,
@@ -18,24 +18,24 @@ class CreateDialog {
     /// Tema opcional aplicado al diálogo y a su contenido.
     ThemeData? theme,
   }) {
-    final dragKey = GlobalKey<_DragToDismissState>();
+    final GlobalKey<_DragToDismissState> dragKey = GlobalKey<_DragToDismissState>();
     return Navigator.of(context).push(
       PageRouteBuilder(
-        opaque              : false,
-        barrierDismissible  : true,
-        pageBuilder         : (context, _, _) =>
+        opaque : false,
+        barrierDismissible : true,
+        pageBuilder : (context, _, _) =>
         Theme(
           data  : theme ?? Theme.of(context),
           child :
         Scaffold(
           backgroundColor : Colors.transparent,
-          body            :
+          body :
           _DialogSurface(
             dragKey     : dragKey,
-            title       : title,
+            title : title,
             maxWidth    : maxWidth,
             onDismissed : onDismissed,
-            child       : child,
+            child : child,
           )
         )
         )
@@ -52,10 +52,10 @@ class CreateDialog {
 /// Así el blur no queda "colgado" mientras la hoja se retira.
 class _DialogSurface extends StatefulWidget {
   final GlobalKey<_DragToDismissState> dragKey;
-  final String                        title;
-  final double                        maxWidth;
-  final Widget                        child;
-  final VoidCallback?                 onDismissed;
+  final String title;
+  final double maxWidth;
+  final Widget child;
+  final VoidCallback? onDismissed;
 
   const _DialogSurface({
     required this.dragKey,
@@ -70,7 +70,7 @@ class _DialogSurface extends StatefulWidget {
 }
 
 class _DialogSurfaceState extends State<_DialogSurface> with SingleTickerProviderStateMixin {
-  static const double    _sigma        = 4;
+  static const double    _sigma = 4;
   static const double    _veilAlpha    = 0.15;
   static const Duration  _blurDuration = Duration(milliseconds: 120);
 
@@ -108,44 +108,44 @@ class _DialogSurfaceState extends State<_DialogSurface> with SingleTickerProvide
   @override
   Widget build(BuildContext context) =>
   NResponsiveBuilder(
-    builder: (screenType, size, axis) {
+    builder : (screenType, size, axis) {
       return Stack(
-        children: [
+        children : [
           Positioned.fill(
-            child:
+            child :
             GestureDetector(
-              onTap: () {
-                final state = widget.dragKey.currentState;
+              onTap : () {
+                final _DragToDismissState? state = widget.dragKey.currentState;
                 if (state == null) {
                   _close();
                 } else {
                   state.animatedDismiss();
                 }
               },
-              child:
+              child :
               AnimatedBuilder(
                 animation : _veil,
                 builder   : (_, _) => BackdropFilter(
                   filter : ImageFilter.blur(sigmaX: _sigma * _veil.value, sigmaY: _sigma * _veil.value),
                   child  : Container(
-                    color: Colors.black.withValues(alpha: _veilAlpha * _veil.value),
+                    color : Colors.black.withValues(alpha: _veilAlpha * _veil.value),
                   ),
                 ),
               )
             )
           ),
           Align(
-            alignment: screenType == .mobile ? .bottomCenter : .center,
-            child:
+            alignment : screenType == .mobile ? .bottomCenter : .center,
+            child     :
             _DragToDismiss(
-              title         : widget.title,
-              key           : widget.dragKey,
-              enabled       : screenType == .mobile,
-              onBeforeDismiss: fadeOutVeil,
-              onDismiss     : _close,
-              size          : size,
-              maxWidth      : widget.maxWidth,
-              child         : widget.child,
+              title     : widget.title,
+              key  : widget.dragKey,
+              enabled   : screenType == .mobile,
+              onBeforeDismiss : fadeOutVeil,
+              onDismiss : _close,
+              size : size,
+              maxWidth  : widget.maxWidth,
+              child     : widget.child,
             )
           )
         ],
@@ -196,14 +196,14 @@ class _DragToDismiss extends StatefulWidget {
 }
 
 class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProviderStateMixin {
-  static const double _dismissThreshold    = 120;
-  static const double _velocityThreshold   = 800;
-  static const Duration _duration          = Duration(milliseconds: 220);
+  static const double _dismissThreshold  = 120;
+  static const double _velocityThreshold = 800;
+  static const Duration _duration = Duration(milliseconds: 220);
 
   /// Proporción de la pantalla que ocupa el diálogo como máximo en mobile.
   /// Deja libre el borde superior para que se lea como hoja y no como
   /// pantalla completa.
-  static const double _maxHeightRatio     = 0.9;
+  static const double _maxHeightRatio = 0.9;
 
   late final AnimationController _controller;
   Tween<double>? _tween;
@@ -228,7 +228,7 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
   /// (mismo movimiento que el gesto, pero en reversa).
   void _animateIn(Duration timeStamp) {
     if (!mounted) return;
-    final height = MediaQuery.of(context).size.height;
+    final double height = MediaQuery.of(context).size.height;
     _dragOffset = height;
     setState(() {});
     _animateTo(height, 0);
@@ -249,8 +249,10 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
     await widget.onBeforeDismiss?.call();
     if (!mounted) return;
 
-    final height = MediaQuery.of(context).size.height;
-    _animateTo(_dragOffset, height, onComplete: widget.onDismiss);
+    final double height = MediaQuery.of(context).size.height;
+    _animateTo(_dragOffset, height,
+      onComplete : widget.onDismiss,
+    );
   }
 
   @override
@@ -260,7 +262,7 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
   }
 
   void _onAnimation() {
-    final tween = _tween;
+    final Tween<double>? tween = _tween;
     if (tween == null) return;
     setState(() {
       _dragOffset = tween.evaluate(_controller);
@@ -278,7 +280,7 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
   void _onVerticalDragEnd(DragEndDetails details) {
     if (!widget.enabled || _dismissing) return;
 
-    final shouldDismiss =
+    final bool shouldDismiss =
       (details.primaryVelocity ?? 0) > _velocityThreshold ||
       _dragOffset                  > _dismissThreshold;
 
@@ -289,7 +291,9 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
     }
   }
 
-  void _animateTo(double from, double to, { VoidCallback? onComplete }) {
+  void _animateTo(double from, double to, {
+    VoidCallback? onComplete,
+  }) {
     _tween = Tween<double>(begin: from, end: to);
     _controller
       ..stop()
@@ -300,16 +304,16 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
   @override
   Widget build(BuildContext context) =>
   GestureDetector(
-    onVerticalDragUpdate: widget.enabled ? _onVerticalDragUpdate : null,
-    onVerticalDragEnd   : widget.enabled ? _onVerticalDragEnd : null,
-    child               :
+    onVerticalDragUpdate : widget.enabled ? _onVerticalDragUpdate : null,
+    onVerticalDragEnd    : widget.enabled ? _onVerticalDragEnd : null,
+    child :
     Transform.translate(
       offset : Offset(0, _dragOffset),
       child  :
       Container(
-        margin      : widget.enabled ? null : .all(20),
+        margin : widget.enabled ? null : .all(20),
         // width       : screenType == .mobile ? size.maxWidth : maxWidth,
-        constraints:
+        constraints :
         BoxConstraints(
           maxWidth  : widget.enabled ? widget.size.maxWidth : widget.maxWidth,
           maxHeight : widget.enabled
@@ -317,27 +321,27 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
           : widget.size.maxHeight - context.topSize
         ),
         // height      : 200,
-        decoration  :
+        decoration :
         BoxDecoration(
-          borderRadius  : widget.enabled ? null : .circular(10),
-          border        : widget.enabled
+          borderRadius : widget.enabled ? null : .circular(10),
+          border : widget.enabled
           ? Border(top: BorderSide(width: 2, color: context.borderColor))
           : .all(width: 2, color: context.borderColor),
-          color         : context.primaryColor
+          color  : context.primaryColor
         ),
-        child:
+        child :
         Column(
-          mainAxisSize: .min,
-          children    : [
+          mainAxisSize : .min,
+          children     : [
             if(widget.enabled)
             Container(
-              margin      : .symmetric(vertical: 7),
-              width       : 130,
-              height      : 2,
-              decoration  :
+              margin     : .symmetric(vertical: 7),
+              width : 130,
+              height     : 2,
+              decoration :
               BoxDecoration(
-                color: context.mainColor,
-                borderRadius: .circular(2.5)
+                color : context.mainColor,
+                borderRadius : .circular(2.5)
               ),
             ),
             Container(
@@ -345,12 +349,12 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
               // decoration: BoxDecoration(
               //   border: Border(bottom: BorderSide(color: context.dividerColor))
               // ),
-              child   :
+              child :
               Row(
-                spacing : 5,
-                children: [
+                spacing  : 5,
+                children : [
                   Expanded(
-                    child:
+                    child :
                     NText(
                       margin  : const .only(left: 5),
                       context : context,
@@ -359,8 +363,8 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
                     )
                   ),
                   InkWell(
-                    onTap: animatedDismiss,
-                    child:
+                    onTap : animatedDismiss,
+                    child :
                     Padding(
                       padding : const .all(3),
                       child   : Icon(Icons.close),
@@ -370,7 +374,7 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
               ),
             ),
             Flexible(
-              child: widget.child
+              child : widget.child
             ),
           ],
         )

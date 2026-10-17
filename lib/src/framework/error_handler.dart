@@ -9,7 +9,11 @@ class NErrorHandler extends StatelessWidget {
   final Widget Function(BuildContext context) builder;
 
   /// Hijo que retorna el widget en caso de que ocurra un error
-  final Widget Function(BuildContext context, Object error, StackTrace? stackTrace)? onError;
+  final Widget Function(
+    BuildContext context,
+    Object error,
+    StackTrace? stackTrace,
+  )? onError;
 
   const NErrorHandler({
     super.key,
@@ -24,10 +28,10 @@ class NErrorHandler extends StatelessWidget {
     } catch (error, stackTrace) {
       if (onError != null) return onError!(context, error, stackTrace);
       return Center(
-        child:
+        child :
         Text(
           "$error",
-          style: const TextStyle(color: Colors.red),
+          style : const TextStyle(color: Colors.red),
         ),
       );
     }

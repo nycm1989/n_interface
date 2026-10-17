@@ -2,7 +2,7 @@
 extension ListExtension<E> on List<E> {
   /// Returns the first element that satisfies [test], or `null` if none match.
   E? singleWhereOrNull(bool Function(E element) test) {
-    for (var element in this) {
+    for (final E element in this) {
       if (test(element)) return element;
     }
     return null;

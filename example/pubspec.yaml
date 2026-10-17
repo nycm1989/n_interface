@@ -25,6 +25,14 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
+  # Required by NToast (the package wraps showToast from flutter_styled_toast,
+  # and the example wraps the app in StyledToast so toasts are displayed).
+  flutter_styled_toast: ^2.3.0
+
+  # Required to initialize locale-aware date formatting used by
+  # DateTimeExtension (e.g. `eeeeddMMMM`).
+  intl: ^0.20.3
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -52,6 +60,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

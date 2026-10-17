@@ -55,7 +55,11 @@ class NResponsiveBuilder extends StatelessWidget {
   ///     - si debe expandirse (`expand`)
   ///
   /// Este builder es el núcleo del widget y permite construir layouts adaptativos.
-  final Widget Function( ScreenType screenType, BoxConstraints size, AxisData axis ) builder;
+  final Widget Function(
+    ScreenType screenType,
+    BoxConstraints size,
+    AxisData axis,
+  ) builder;
 
   const NResponsiveBuilder({
     required this.builder,
@@ -71,10 +75,10 @@ class NResponsiveBuilder extends StatelessWidget {
   Widget build(BuildContext context) =>
   /// El widget se envuelve en `NAsyncLoader` para manejar estados de carga asincrónica.
   NAsyncLoader(
-    onLoading   : onLoading,
-    onFinished  : onFinished,
-    indicator   : indicator,
-    child       :
+    onLoading  : onLoading,
+    onFinished : onFinished,
+    indicator  : indicator,
+    child :
     /// LayoutBuilder permite acceder a las restricciones actuales del contenedor
     /// para construir UI responsiva.
     LayoutBuilder (
@@ -94,9 +98,9 @@ class NResponsiveBuilder extends StatelessWidget {
           /// - Vertical si es menor al breakpoint (mobile)
           /// - Horizontal si es mayor o igual (desktop/tablet)
           AxisData(
-            main    : size.maxWidth <  breakSize ? .vertical   : .horizontal,
-            second  : size.maxWidth <  breakSize ? .horizontal : .vertical,
-            expand  : size.maxWidth >= breakSize
+            main   : size.maxWidth <  breakSize ? .vertical   : .horizontal,
+            second : size.maxWidth <  breakSize ? .horizontal : .vertical,
+            expand : size.maxWidth >= breakSize
           )
         )
       )

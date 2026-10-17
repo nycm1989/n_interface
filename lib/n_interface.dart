@@ -1,5 +1,3 @@
-library n_interface;
-
 export 'src/enums/screen_type.dart' show ScreenType;
 
 export 'src/extenssions/box_constraints_extension.dart' show ScreenTypeExtension;

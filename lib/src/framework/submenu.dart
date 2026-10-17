@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show AnimatedContainer, BorderRadius, BoxShadow, BoxDecoration, BuildContext, Color, Colors, Container, EdgeInsets, EdgeInsetsGeometry, Expanded, FontWeight, GestureDetector, GestureTapCallback, Image, InkWell, ListView, Material, MaterialType, MouseCursor, MouseRegion, NeverScrollableScrollPhysics, Offset, Overlay, OverlayEntry, Positioned, RenderBox, Row, SizedBox, Stack, State, StatefulWidget, SystemMouseCursors, TextOverflow, Widget;
+import 'package:flutter/material.dart' show AnimatedContainer, BorderRadius, BoxShadow, BoxDecoration, BuildContext, Color, Colors, Container, EdgeInsets, EdgeInsetsGeometry, Expanded, FontWeight, GestureDetector, GestureTapCallback, Image, InkWell, ListView, Material, MaterialType, MouseCursor, MouseRegion, NeverScrollableScrollPhysics, Offset, Overlay, OverlayEntry, Positioned, RenderBox, Row, Size, SizedBox, Stack, State, StatefulWidget, SystemMouseCursors, TextOverflow, Widget;
 import 'package:n_interface/src/extenssions/context_extension.dart' show ContextExtension;
 import 'text.dart' show NText;
 import 'tooltip.dart' show NTooltip;
@@ -23,18 +23,18 @@ class NSubMenu extends StatefulWidget {
   final bool    enabled;
   final double  dimension;
   final double  menuWidth;
-  final EdgeInsetsGeometry  margin;
-  final NSubMenuAlignment    alignment;
-  final List<NSubMenuItem>   items;
+  final EdgeInsetsGeometry margin;
+  final NSubMenuAlignment  alignment;
+  final List<NSubMenuItem> items;
 
   const NSubMenu({
     required this.asset,
     this.oversset,
     this.disableAsset,
-    this.enabled    = true,
-    this.dimension  = 25,
-    this.menuWidth  = 200,
-    this.margin     = const EdgeInsets.all(2),
+    this.enabled   = true,
+    this.dimension = 25,
+    this.menuWidth = 200,
+    this.margin    = const EdgeInsets.all(2),
     required this.alignment,
     required this.items,
     super.key
@@ -45,8 +45,8 @@ class NSubMenu extends StatefulWidget {
 }
 
 class _NSubMenuState extends State<NSubMenu> {
-  bool          isOver      = false;
-  late Offset   menuOffset;
+  bool          isOver = false;
+  late Offset menuOffset;
   OverlayEntry? _overlayEntry;
 
   /// Abre el menú desplegable.
@@ -63,8 +63,8 @@ class _NSubMenuState extends State<NSubMenu> {
 
   /// Calcula las coordenadas de posición del menú en pantalla.
   void _checkSize() {
-    late final offset = (context.findRenderObject() as RenderBox?)?.localToGlobal(.zero) ?? .zero;
-    late final size   = (context.findRenderObject() as RenderBox?)?.size ?? .zero;
+    late final Offset offset = (context.findRenderObject() as RenderBox?)?.localToGlobal(.zero) ?? .zero;
+    late final Size size     = (context.findRenderObject() as RenderBox?)?.size ?? .zero;
 
     menuOffset =
     widget.alignment == .topLeft      ? Offset(offset.dx - widget.menuWidth,  offset.dy + size.height) :
@@ -78,15 +78,15 @@ class _NSubMenuState extends State<NSubMenu> {
   OverlayEntry _createOverlayEntry() {
     _checkSize();
     return OverlayEntry(
-      builder: (context) =>
+      builder : (context) =>
       Stack(
-        children: [
+        children : [
           Positioned.fill(
-            child:
+            child :
             GestureDetector(
-              behavior  : .translucent,
-              onTap     : _closeNDropdown,
-              child     : const SizedBox.expand(),
+              behavior : .translucent,
+              onTap    : _closeNDropdown,
+              child    : const SizedBox.expand(),
             ),
           ),
           Positioned(
@@ -94,32 +94,32 @@ class _NSubMenuState extends State<NSubMenu> {
             left  : menuOffset.dx,
             child :
             Material(
-              type: MaterialType.transparency,
-              child:
+              type  : MaterialType.transparency,
+              child :
               Container(
-                decoration: BoxDecoration(
-                  color       : Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow   : [
+                decoration : BoxDecoration(
+                  color : Colors.white,
+                  borderRadius : BorderRadius.circular(10),
+                  boxShadow    : [
                     BoxShadow(
-                      color         : Colors.black.withValues(alpha: 0.08),
-                      blurRadius    : 20,
-                      spreadRadius  : 2,
-                      offset        : const Offset(0, 8),
+                      color  : Colors.black.withValues(alpha: 0.08),
+                      blurRadius   : 20,
+                      spreadRadius : 2,
+                      offset : const Offset(0, 8),
                     ),
                     BoxShadow(
-                      color         : Colors.black.withValues(alpha: 0.04),
-                      blurRadius    : 6,
-                      offset        : const Offset(0, 2),
+                      color : Colors.black.withValues(alpha: 0.04),
+                      blurRadius : 6,
+                      offset     : const Offset(0, 2),
                     ),
                   ],
                 ),
-                padding : const EdgeInsets.symmetric(
-                  vertical  : 6,
-                  horizontal: 6,
+                padding    : const EdgeInsets.symmetric(
+                  vertical   : 6,
+                  horizontal : 6,
                 ),
-                width   : widget.menuWidth,
-                child   :
+                width : widget.menuWidth,
+                child :
                 ListView.builder(
                   shrinkWrap  : true,
                   padding     : EdgeInsets.zero,
@@ -160,11 +160,11 @@ class _NSubMenuState extends State<NSubMenu> {
       onTap : () => _overlayEntry == null ? _openNDropdown() : _closeNDropdown(),
       child :
       Container(
-        width   : widget.dimension,
-        height  : widget.dimension,
-        color   : Colors.transparent,
-        margin  : widget.margin,
-        child   :
+        width  : widget.dimension,
+        height : widget.dimension,
+        color  : Colors.transparent,
+        margin : widget.margin,
+        child  :
         Image.asset(
           !widget.enabled
           ? (widget.disableAsset ?? widget.asset)
@@ -236,38 +236,38 @@ class _NSubMenuItemState extends State<_NSubMenuItem> {
         },
         child :
         AnimatedContainer(
-          duration  : const Duration(milliseconds: 100),
-          height    : 36,
-          margin    : const EdgeInsets.symmetric(
-            vertical  : 2,
-            horizontal: 4,
+          duration   : const Duration(milliseconds: 100),
+          height     : 36,
+          margin     : const EdgeInsets.symmetric(
+            vertical   : 2,
+            horizontal : 4,
           ),
-          padding   : const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color       : isOver ? (widget.color ?? context.textColor).withValues(alpha: 0.06) : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+          padding    : const EdgeInsets.symmetric(horizontal: 12),
+          decoration : BoxDecoration(
+            color : isOver ? (widget.color ?? context.textColor).withValues(alpha: 0.06) : Colors.transparent,
+            borderRadius : BorderRadius.circular(8),
           ),
-          child     :
+          child :
           Row(
-            spacing : 12,
-            children: [
+            spacing  : 12,
+            children : [
               if(widget.asset != null)
               Image.asset(
                 widget.asset!,
-                width : 16,
-                height: 16,
+                width  : 16,
+                height : 16,
               ),
               if(widget.text  != null)
               Expanded(
                 child :
                 NText(
-                  context   : context,
-                  text      : widget.text!,
-                  color     : widget.color ?? context.textColor,
-                  size      : 13,
-                  weight    : isOver ? FontWeight.w500 : FontWeight.w400,
-                  overflow  : TextOverflow.ellipsis,
-                  maxLines  : 1,
+                  context  : context,
+                  text     : widget.text!,
+                  color    : widget.color ?? context.textColor,
+                  size     : 13,
+                  weight   : isOver ? FontWeight.w500 : FontWeight.w400,
+                  overflow : TextOverflow.ellipsis,
+                  maxLines : 1,
                 ),
               )
             ],
