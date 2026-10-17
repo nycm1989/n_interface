@@ -1,3 +1,6 @@
+## 0.0.3+1
+* Added `nowApp()` from `DateTimeExtension`
+
 ## 0.0.3
 * Added widgets: `NAccordion`, `NCheck`, `NDragEdgeAutoScroller`, `NHoverCard`, `NMultiSelectDropdown`, `OverflowTooltipText`, `RecoloredImage`, `NSlideSwitcher`, `NSlider` and `NStepper`.
 * Added `AccordionController`.

@@ -43,17 +43,6 @@ DateTime _naive(DateTime dt) => DateTime(
 /// `DateTime.now()` — son instantes y la zona no cambia el valor.
 DateTime nowApp() => _naive(DateTime.now().toUtc().add(_appUtcOffset));
 
-/// Salida hacia el back HTTP/WS. Enviar datos de fecha siempre con especificación de zona horaria, por ahora se aceptan los datos sin esta especificación pero se debe cambiar en el futuro. Se puede usar este método como base si se desea hacer el cambio en el futuro.
-extension DateTimeApi on DateTime {
-  /// Instante absoluto (UTC) para la API: un `DateTime` naive se interpreta
-  /// como hora de Perú —no como hora del dispositivo— y se convierte a UTC.
-  DateTime get toApiInstant => isUtc
-      ? toUtc()
-      : DateTime.utc(year, month, day, hour, minute, second, millisecond, microsecond)
-          .subtract(_appUtcOffset);
-
-  String get toApiIso => toApiInstant.toIso8601String();
-}
 
 /// Entrada desde el back: devuelve siempre la hora de Perú, sin zona.
 ///

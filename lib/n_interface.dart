@@ -2,7 +2,7 @@ export 'src/enums/screen_type.dart' show NScreenType;
 
 export 'src/extenssions/box_constraints_extension.dart' show NScreenTypeExtension;
 export 'src/extenssions/context_extension.dart' show ContextExtension;
-export 'src/extenssions/date_time_extension.dart' show DateTimeExtension;
+export 'src/extenssions/date_time_extension.dart' show DateTimeExtension, nowApp;
 export 'src/extenssions/duration_extension.dart' show DurationExtension;
 export 'src/extenssions/list_extension.dart' show ListExtension, ListNumExtension;
 export 'src/extenssions/map_extension.dart' show MapDynamicExtension, MapStringExtension;
