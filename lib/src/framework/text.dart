@@ -12,7 +12,6 @@ enum _Type {
 }
 
 class NText extends StatelessWidget {
-  final BuildContext context;
   final String text;
   final double size;
   final FontWeight   weight;
@@ -28,7 +27,6 @@ class NText extends StatelessWidget {
   final _Type _type;
 
   const NText({
-    required this.context,
     required this.text,
     this.size   = 12,
     this.weight = .normal,
@@ -44,7 +42,6 @@ class NText extends StatelessWidget {
   }) : _type = .normal;
 
   const NText.bold({
-    required this.context,
     required this.text,
     this.size = 12,
     this.color,
@@ -61,7 +58,6 @@ class NText extends StatelessWidget {
   weight = .w500;
 
   const NText.button({
-    required this.context,
     required this.text,
     this.size = 12,
     this.margin,

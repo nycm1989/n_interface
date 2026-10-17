@@ -65,7 +65,6 @@ class NAxisLayout extends StatelessWidget {
                   children : [
                     if(isRequired)
                     NText(
-                      context : context,
                       text    : "*",
                       weight  : weight ?? .w400,
                       color   : context.mainColor
@@ -76,7 +75,6 @@ class NAxisLayout extends StatelessWidget {
                         padding : const .only(bottom: 5),
                         child   :
                         NText(
-                          context  : context,
                           text     : title!,
                           weight   : weight ?? .w400,
                           overflow : overflow ?? .clip,

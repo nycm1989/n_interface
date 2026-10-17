@@ -357,7 +357,6 @@ class _DragToDismissState extends State<_DragToDismiss> with SingleTickerProvide
                     child :
                     NText(
                       margin  : const .only(left: 5),
-                      context : context,
                       text    : widget.title,
                       size    : 16,
                     )

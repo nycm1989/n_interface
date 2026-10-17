@@ -261,7 +261,6 @@ class _NSubMenuItemState extends State<_NSubMenuItem> {
               Expanded(
                 child :
                 NText(
-                  context  : context,
                   text     : widget.text!,
                   color    : widget.color ?? context.textColor,
                   size     : 13,

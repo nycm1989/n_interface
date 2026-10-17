@@ -63,7 +63,6 @@ class NSwitcher extends StatelessWidget {
               textBuilder : texts.isEmpty
               ? null
               : (value) => NText(
-                context : context,
                 text    : value ? texts.first : texts.last,
                 size    : 10,
                 color   : Colors.grey,
@@ -96,7 +95,6 @@ class NSwitcher extends StatelessWidget {
                 }
                 if (texts.length == 2 && icons.isEmpty) {
                   return NText(
-                    context : context,
                     text    : !value ? texts.first : texts.last,
                     size    : 10,
                     weight  : .w500,

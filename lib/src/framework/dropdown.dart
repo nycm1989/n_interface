@@ -9,7 +9,6 @@ import 'text_field.dart' show NTextController;
 class NDropdown<T> extends NAxisLayout {
   NDropdown({
     NTextController? controller,
-    required BuildContext context,
     ValueChanged<String>? onChanged,
     Future<void> Function()? onLoading,
     Function()? onFinished,
@@ -386,7 +385,6 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
                       )
                     : widget.menuButton ??
                       NText(
-                        context : context,
                         text    : widget.text ?? widget.hint ?? '',
                         size    : widget.size,
                       ),

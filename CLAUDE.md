@@ -210,7 +210,8 @@ Every property and value of a class or method must be aligned using whitespace
 (tabs or spaces) in declarations, assignments and injections. Inside each
 contiguous group (same indentation), pad each line so that its separator
 (`:` or `=`) — or the start of the name in a declaration — lines up with the
-widest entry of the group.
+widest entry of the group. This includes typed constructor parameters, where the
+type is padded so every parameter name starts on the same column (see rule 11).
 
 ```dart
 // ❌ Wrong
@@ -303,4 +304,28 @@ final _dialogTitle = NTextController();
 
 // ✅ Correct
 final NTextController _dialogTitle = NTextController();
+```
+
+## 11. Align constructor parameter types and names
+
+Following rule 8, in a constructor that declares typed parameters (not
+`this.x`), the type must be padded with whitespace so that every parameter name
+starts in a straight line, at the column of the **longest type** in the group.
+
+```dart
+// ❌ Wrong
+NDropdown({
+  NTextController? controller,
+  ValueChanged<String>? onChanged,
+  Future<void> Function()? onLoading,
+  Function()? onFinished,
+});
+
+// ✅ Correct
+NDropdown({
+  NTextController?         controller,
+  ValueChanged<String>?    onChanged,
+  Future<void> Function()? onLoading,
+  Function()?              onFinished,
+});
 ```

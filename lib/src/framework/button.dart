@@ -445,7 +445,6 @@ class _Button extends StatelessWidget {
               ? Flexible(
                 child :
                 NText(
-                  context  : context,
                   weight   : .w400,
                   text     : widget.text,
                   overflow : widget.textOverflow ?? .ellipsis,
@@ -458,7 +457,6 @@ class _Button extends StatelessWidget {
                 expandWhen : widget.width != null,
                 child :
                 NText(
-                  context  : context,
                   weight   : .w400,
                   text     : widget.text,
                   overflow : widget.textOverflow ?? .ellipsis,

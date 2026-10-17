@@ -186,13 +186,11 @@ class _Header extends StatelessWidget {
     crossAxisAlignment : CrossAxisAlignment.start,
     children : [
       NText.bold(
-        context : context,
         text    : 'n_interface',
         size    : 28,
       ),
       const SizedBox(height: 4),
       NText(
-        context : context,
         text    : 'A showcase of every widget exported from n_interface.dart',
         size    : 14,
         color   : context.textMutedColor,
@@ -232,7 +230,6 @@ class _Chip extends StatelessWidget {
     ),
     child :
     NText(
-      context : context,
       text    : label,
       size    : 11,
       color   : context.mainColor,
@@ -268,13 +265,11 @@ class _Section extends StatelessWidget {
       crossAxisAlignment : CrossAxisAlignment.start,
       children : [
         NText.bold(
-          context : context,
           text    : title,
           size    : 15,
         ),
         const SizedBox(height: 2),
         NText(
-          context : context,
           text    : subtitle,
           size    : 12,
           color   : context.textMutedColor,
@@ -299,29 +294,24 @@ class _TextSection extends StatelessWidget {
       crossAxisAlignment : CrossAxisAlignment.start,
       children : [
         NText(
-          context : context,
           text    : 'Normal text',
         ),
         const SizedBox(height: 6),
         NText.bold(
-          context : context,
           text    : 'Bold text',
         ),
         const SizedBox(height: 6),
         NText.button(
-          context : context,
           text    : 'Button-styled text',
         ),
         const SizedBox(height: 6),
         NText(
-          context  : context,
           text     : 'Ellipsized text long enough to overflow the available width',
           overflow : TextOverflow.ellipsis,
           maxLines : 1,
         ),
         const SizedBox(height: 6),
         NText(
-          context : context,
           text    : 'Shadowed text',
           shadow  :
           const Shadow(
@@ -483,7 +473,6 @@ class _DropdownSection extends StatelessWidget {
     subtitle : 'Overlay-based dropdown, with optional async loading on open.',
     child    :
     NDropdown<String>(
-      context     : context,
       title : 'Company',
       isRequired  : true,
       width : 280,
@@ -492,7 +481,6 @@ class _DropdownSection extends StatelessWidget {
       items : const ['n_interface', 'Flutter', 'Dart'],
       itemBuilder : (item, index) =>
       NText(
-        context : context,
         text    : item,
       ),
       onSelection : (item, index) => onChanged(item),
@@ -557,13 +545,11 @@ class _LayoutSection extends StatelessWidget {
           isRequired : true,
           action     :
           NText(
-            context : context,
             text    : '(action)',
             size    : 11,
           ),
           child :
           NText(
-            context : context,
             text    : 'Horizontal content',
           ),
         ),
@@ -581,7 +567,6 @@ class _LayoutSection extends StatelessWidget {
                   alignment : Alignment.center,
                   child     :
                   NText(
-                    context : context,
                     text    : 'expandWhen: true',
                   ),
                 ),
@@ -596,7 +581,6 @@ class _LayoutSection extends StatelessWidget {
                   alignment : Alignment.center,
                   child     :
                   NText(
-                    context : context,
                     text    : 'Fixed',
                     color   : Colors.white,
                   ),
@@ -636,7 +620,6 @@ class _AsyncSection extends StatelessWidget {
         ),
         child :
         NText(
-          context : context,
           text    : 'Loaded in ${size.maxWidth.toStringAsFixed(0)}px width container.',
         ),
       ),
@@ -678,7 +661,6 @@ class _SubMenuSection extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         NText(
-          context : context,
           text    : 'Tap the icon to open the menu',
           size    : 12,
         ),
@@ -709,7 +691,6 @@ class _ErrorSection extends StatelessWidget {
           builder : (context) {
             if (throwError) throw StateError('Simulated build error');
             return NText(
-              context : context,
               text    : 'This child builds successfully.',
             );
           },
@@ -725,7 +706,6 @@ class _ErrorSection extends StatelessWidget {
               Expanded(
                 child :
                 NText(
-                  context : context,
                   text    : 'Recovered from error: $error',
                   color   : context.errorColor,
                 ),
@@ -817,7 +797,6 @@ class _KeyValueRow extends StatelessWidget {
           width : 260,
           child :
           NText.bold(
-            context : context,
             text    : label,
             size    : 12,
           ),
@@ -826,7 +805,6 @@ class _KeyValueRow extends StatelessWidget {
         Expanded(
           child :
           NText(
-            context : context,
             text    : value,
             size    : 12,
             color   : context.textMutedColor,
@@ -907,7 +885,6 @@ class _CreateRecordDialog extends StatelessWidget {
       crossAxisAlignment : CrossAxisAlignment.stretch,
       children     : [
         NText(
-          context : context,
           text    : 'Dialog content is fully themed and responsive. On mobile it opens '
               'as a drag-to-dismiss bottom sheet.',
           size    : 13,
