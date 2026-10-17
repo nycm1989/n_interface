@@ -119,7 +119,7 @@ class _DemoPageState extends State<DemoPage> {
         ),
         padding   : (type) =>
         EdgeInsets.symmetric(
-          horizontal : type == ScreenType.mobile ? 16 : 40,
+          horizontal : type == NScreenType.mobile ? 16 : 40,
           vertical   : 24,
         ),
         builder   : (screenType, size, axis) =>
@@ -172,7 +172,7 @@ class _DemoPageState extends State<DemoPage> {
 }
 
 class _Header extends StatelessWidget {
-  final ScreenType screenType;
+  final NScreenType screenType;
   final AxisData   axis;
 
   const _Header({
@@ -200,7 +200,7 @@ class _Header extends StatelessWidget {
         spacing    : 8,
         runSpacing : 8,
         children   : [
-          _Chip(label: 'ScreenType.${screenType.name}'),
+          _Chip(label: 'NScreenType.${screenType.name}'),
           _Chip(label: 'axis.main: ${axis.main.name}'),
           _Chip(label: 'axis.second: ${axis.second.name}'),
           _Chip(label: 'expand: ${axis.expand}'),

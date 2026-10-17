@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:n_interface/src/extenssions/context_extension.dart' show ContextExtension;
+import 'package:n_interface/n_interface.dart' show NTextController, NTextFieldAction, ContextExtension, NText;
 
-import 'text.dart' show NText;
 import 'async_loader.dart' show NAsyncLoader;
 import 'axis_layout.dart' show NAxisLayout;
-import 'text_field.dart' show NTextController;
 
 class NDropdown<T> extends NAxisLayout {
   NDropdown({
-    NTextController? controller,
-    ValueChanged<String>? onChanged,
-    Future<void> Function()? onLoading,
-    Function()? onFinished,
-    super.axis  = .vertical,
+    NTextController?          controller,
+    ValueChanged<String>?     onChanged,
+    Future<void> Function()?  onLoading,
+    Function()?               onFinished,
+    super.axis = .vertical,
     super.isRequired = false,
     super.action,
     super.title,
@@ -22,7 +20,7 @@ class NDropdown<T> extends NAxisLayout {
     super.height,
     super.margin,
     super.key,
-    bool arrow  = true,
+    bool arrow = true,
     String? text,
     String? hint,
     String? errorText,
@@ -33,8 +31,8 @@ class NDropdown<T> extends NAxisLayout {
     EdgeInsetsGeometry? assetPadding,
     double size = 12,
     bool enable = true,
-    bool readOnly    = false,
-    bool error  = false,
+    bool readOnly = false,
+    bool error = false,
     EdgeInsetsGeometry? padding,
     List<T>? items,
     EdgeInsetsGeometry? itemPadding,
@@ -45,40 +43,44 @@ class NDropdown<T> extends NAxisLayout {
     BoxDecoration? headerDecoration,
     Function(T item, int index)? onSelection,
     Widget Function(T item, int index)? itemBuilder,
+    NTextFieldAction? prefix,
+    NTextFieldAction? suffix,
     Widget? child,
   }) : super(
-    child :
+    child:
     _NDropdown<T>(
-      controller  : controller,
-      onLoading   : onLoading,
-      onFinished  : onFinished,
-      onChanged   : onChanged,
-      text   : text,
-      arrow  : arrow,
-      hint   : hint,
-      errorText   : errorText,
-      size   : size,
-      asset  : asset,
-      assetSize   : assetSize,
-      assetPadding     : assetPadding,
-      align  : align,
-      weight : weight,
-      color  : color,
-      enable : enable,
-      readOnly    : readOnly,
-      error  : error,
-      padding     : padding,
-      margin : margin,
-      items  : items,
-      itemPadding : itemPadding,
-      menuWidth   : menuWidth,
-      menuMaxHeight    : menuMaxHeight,
-      menuButton  : menuButton,
-      headerHeight     : headerHeight,
-      headerDecoration : headerDecoration,
-      onSelection : onSelection,
-      itemBuilder : itemBuilder,
-      child  : child,
+      controller        : controller,
+      onLoading         : onLoading,
+      onFinished        : onFinished,
+      onChanged         : onChanged,
+      text              : text,
+      arrow             : arrow,
+      hint              : hint,
+      errorText         : errorText,
+      size              : size,
+      asset             : asset,
+      assetSize         : assetSize,
+      assetPadding      : assetPadding,
+      align             : align,
+      weight            : weight,
+      color             : color,
+      enable            : enable,
+      readOnly          : readOnly,
+      error             : error,
+      padding           : padding,
+      margin            : margin,
+      items             : items,
+      itemPadding       : itemPadding,
+      menuWidth         : menuWidth,
+      menuMaxHeight     : menuMaxHeight,
+      menuButton        : menuButton,
+      headerHeight      : headerHeight,
+      headerDecoration  : headerDecoration,
+      onSelection       : onSelection,
+      itemBuilder       : itemBuilder,
+      prefix            : prefix,
+      suffix            : suffix,
+      child             : child,
     ),
   );
 }
@@ -102,35 +104,37 @@ class NDropdownScope extends InheritedWidget {
 
 class _NDropdown<T> extends StatefulWidget {
   final NTextController? controller;
-  final Future<void> Function()?     onLoading;
+  final Future<void> Function()? onLoading;
   final Function()? onFinished;
   final ValueChanged<String>? onChanged;
-  final bool   arrow;
-  final bool   enable;
-  final bool   readOnly;
-  final bool   error;
-  final String?     asset;
-  final double?     assetSize;
-  final EdgeInsetsGeometry?   assetPadding;
+  final bool arrow;
+  final bool enable;
+  final bool readOnly;
+  final bool error;
+  final String? asset;
+  final double? assetSize;
+  final EdgeInsetsGeometry? assetPadding;
   final Color? color;
   final double size;
   final FontWeight? weight;
-  final String?     text;
-  final TextAlign?  align;
-  final String?     hint;
-  final String?     errorText;
-  final EdgeInsetsGeometry?   padding;
-  final EdgeInsetsGeometry?   margin;
-  final double?     menuWidth;
-  final double?     menuMaxHeight;
-  final Widget?     menuButton;
-  final double?     headerHeight;
-  final BoxDecoration?   headerDecoration;
-  final Widget?     child;
-  final List<T>?    items;
-  final EdgeInsetsGeometry?   itemPadding;
+  final String? text;
+  final TextAlign? align;
+  final String? hint;
+  final String? errorText;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final double? menuWidth;
+  final double? menuMaxHeight;
+  final Widget? menuButton;
+  final double? headerHeight;
+  final BoxDecoration? headerDecoration;
+  final Widget? child;
+  final List<T>? items;
+  final EdgeInsetsGeometry? itemPadding;
   final Function(T item, int index)? onSelection;
   final Widget Function(T item, int index)? itemBuilder;
+  final NTextFieldAction? prefix;
+  final NTextFieldAction? suffix;
 
   const _NDropdown({
     super.key,
@@ -164,6 +168,8 @@ class _NDropdown<T> extends StatefulWidget {
     required this.headerDecoration,
     required this.onSelection,
     required this.itemBuilder,
+    required this.prefix,
+    required this.suffix,
   });
 
   @override
@@ -172,16 +178,16 @@ class _NDropdown<T> extends StatefulWidget {
 
 class __NDropdownState<T> extends State<_NDropdown<T>> {
   final ScrollController scrollController = ScrollController();
-  final OverlayPortalController _portal   = OverlayPortalController();
+  final OverlayPortalController _portal = OverlayPortalController();
   // final LayerLink _link = LayerLink();
-  final GlobalKey anchorKey = GlobalKey();
+  final GlobalKey anchorKey   = GlobalKey();
   // Declared here (not inside overlayChildBuilder) so it never changes between
   // builds — a new GlobalKey each rebuild would destroy and recreate the entire
   // overlay subtree (including any stateful child like SingleDatePicker).
-  final GlobalKey _menuKey = GlobalKey();
-  ValueNotifier<double>   overflow = ValueNotifier<double>(0);
-  ValueNotifier<double?>  height   = ValueNotifier<double?>(null);
-  ValueNotifier<double>   menuStartPoint = ValueNotifier<double>(0);
+  final GlobalKey _menuKey    = GlobalKey();
+  ValueNotifier<double>   overflow        = ValueNotifier<double>(0);
+  ValueNotifier<double?>  height          = ValueNotifier<double?>(null);
+  ValueNotifier<double>   menuStartPoint  = ValueNotifier<double>(0);
 
   NTextController? inputController;
   bool isExpanded = false;
@@ -193,11 +199,7 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
     super.initState();
   }
 
-  void _toggle() async {
-    if (!isExpanded && widget.onLoading != null) {
-      await widget.onLoading!();
-      if (!mounted) return;
-    }
+  void _toggle() {
     setState(() {
       isExpanded = !isExpanded;
       isExpanded ? _portal.show() : _portal.hide();
@@ -220,20 +222,20 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
   @override
   Widget build(BuildContext context) =>
   OverlayPortal(
-    controller : _portal,
-    overlayChildBuilder : (context) {
+    controller: _portal,
+    overlayChildBuilder: (context) {
 
-      final RenderBox? box  = anchorKey.currentContext?.findRenderObject() as RenderBox?;
-      final Offset offset   = box?.localToGlobal(Offset.zero) ?? Offset.zero;
+      final RenderBox? box = anchorKey.currentContext?.findRenderObject() as RenderBox?;
+      final Offset offset = box?.localToGlobal(Offset.zero) ?? Offset.zero;
       final Size targetSize = box?.size ?? Size.zero;
 
-      final double menuWidth = widget.menuWidth ?? targetSize.width;
-      menuStartPoint.value   = offset.dx - (menuWidth / 2) + (targetSize.width / 2);
+      final double menuWidth  = widget.menuWidth ?? targetSize.width;
+      menuStartPoint.value = offset.dx - (menuWidth / 2) + (targetSize.width / 2);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final double buttomHeight = box?.size.height ?? 0;
-        final double menuHeight   = _menuKey.currentContext?.size?.height ?? 0;
-        final double widgetHeight = buttomHeight + menuHeight + 20;
+        final double buttomHeight       = box?.size.height ?? 0;
+        final double menuHeight         = _menuKey.currentContext?.size?.height ?? 0;
+        final double widgetHeight       = buttomHeight + menuHeight + 20;
         final double menuWidthOverflow = menuStartPoint.value + menuWidth - MediaQuery.of(context).size.width + 20;
 
         menuHeight + 20 > MediaQuery.of(context).size.height
@@ -244,59 +246,59 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
       });
 
       return Stack(
-        children : [
+        children: [
           Positioned.fill(
-            child :
+            child:
             GestureDetector(
-              behavior : .translucent,
-              onTap    : _toggle,
-              child    : const SizedBox.expand(),
+              behavior  : .translucent,
+              onTap     : _toggle,
+              child     : const SizedBox.expand(),
             ),
           ),
           ValueListenableBuilder<double?>(
             valueListenable : menuStartPoint,
-            builder : (_, startPoint, _) =>
+            builder         : (_, startPoint, _) =>
             ValueListenableBuilder<double?>(
               valueListenable : height,
-              builder : (_, height, _) =>
+              builder         : (_, height, _) =>
               ValueListenableBuilder<double>(
-                valueListenable : overflow,
-                builder : (_, overflow, _) =>
+                valueListenable: overflow,
+                builder: (_, overflow, _) =>
                 Positioned(
-                  left   : startPoint,
-                  top    : height != null ? 10 : offset.dy + targetSize.height + (overflow.isNegative ? overflow - 20 : 0),
-                  width  : menuWidth,
-                  height : height,
-                  child  :
+                  left  : startPoint,
+                  top   : height != null ? 10 : offset.dy + targetSize.height + (overflow.isNegative ? overflow - 20 : 0),
+                  width : menuWidth,
+                  height: height,
+                  child :
                   Material(
-                    borderRadius : .circular(8),
-                    elevation    : 4,
-                    color : context.backgroundColor,
-                    child :
+                    borderRadius: .circular(8),
+                    elevation   : 4,
+                    color       : context.backgroundColor,
+                    child       :
                     Container(
-                      key   : _menuKey,
-                      clipBehavior : .hardEdge,
-                      decoration   : BoxDecoration(borderRadius: .circular(10)),
-                      child : NDropdownScope(
-                        close : _toggle,
-                        child : widget.child ??
+                      key         : _menuKey,
+                      clipBehavior: .hardEdge,
+                      decoration  : BoxDecoration(borderRadius: .circular(10)),
+                      child       : NDropdownScope(
+                        close: _toggle,
+                        child: widget.child ??
                         Container(
-                          height : height,
+                          height      : height,
                           constraints : widget.menuMaxHeight != null && height == null ? BoxConstraints(maxHeight: widget.menuMaxHeight!) : null,
-                          child  :
+                          child       :
                           Scrollbar(
                             thumbVisibility : true,
-                            controller : scrollController,
-                            child :
+                            controller  : scrollController,
+                            child       :
                             ListView(
-                              controller : scrollController,
-                              physics    : const ClampingScrollPhysics(),
-                              padding    : .zero,
-                              shrinkWrap : true,
-                              children   : widget.items!.asMap().entries.map((e) =>
+                              controller  : scrollController,
+                              physics     : const ClampingScrollPhysics(),
+                              padding     : .zero,
+                              shrinkWrap  : true,
+                              children    : (widget.items ?? []).asMap().entries.map((e) =>
                                 _ItemContainer(
-                                  index : e.key,
-                                  item  : e.value,
+                                  index       : e.key,
+                                  item        : e.value,
                                   itemPadding : widget.itemPadding,
                                   onSelection : widget.onSelection,
                                   itemBuilder : widget.itemBuilder!,
@@ -316,68 +318,69 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
         ]
       );
     },
-    child :
+    child:
     Column(
-      crossAxisAlignment : CrossAxisAlignment.start,
-      children : [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Container(
-          key   : anchorKey,
-          margin     : widget.margin,
-          padding    : .only(
-            top    : 5,
-            bottom : 5,
-            left   : 10,
-            right  : widget.readOnly ? 10 : widget.arrow ? 5 : 10,
-          ),
-          decoration : widget.headerDecoration ?? BoxDecoration(
-            color  : widget.enable || widget.controller != null ? context.primaryColor : context.disabledColor,
-            borderRadius : .circular(10),
-            border :
+          key         : anchorKey,
+          margin      : widget.margin,
+          padding     : .only(top: 5, bottom: 5, left: 10, right: widget.readOnly ? 10 : widget.arrow ? 5 : 10),
+          decoration  : widget.headerDecoration ?? BoxDecoration(
+            color         : widget.enable || widget.controller != null ? context.primaryColor : context.disabledColor,
+            borderRadius  : .circular(10),
+            border        :
             Border.all(
-              width : 0.7,
-              color : widget.error
+              width: 0.7,
+              color: widget.error
                 ? Colors.red
                 : isOver ? context.dividerColor : context.cardColor
             ),
-            boxShadow    : widget.enable ? isOver ? const [BoxShadow(color: Colors.black12, blurRadius: 1)] : null : null
+            boxShadow: widget.enable ? isOver ? const [BoxShadow(color: Colors.black12, blurRadius: 1)] : null : null
           ),
-          child :
+          child   :
           MouseRegion(
             cursor  : SystemMouseCursors.click,
             onEnter : (event) => setState(() => isOver = true  ),
             onExit  : (event) => setState(() => isOver = false ),
             child   :
             GestureDetector(
-              onTap : widget.enable && !widget.readOnly ? _toggle : null,
-              child :
+              onTap: widget.enable && !widget.readOnly ? _toggle : null,
+              child:
               Row(
-                children : [
+                children: [
+                  if(widget.prefix != null) widget.prefix!,
                   Expanded(
-                    child : widget.onChanged != null
+                    child: widget.onChanged != null
                     ? TextFormField(
-                        controller  : widget.controller ?? inputController,
+                        controller        : widget.controller ?? inputController,
                         selectAllOnFocus  : true,
-                        onChanged   : widget.onChanged,
-                        onTap : () {
-                          if(!isExpanded) _portal.show();
-                        },
+                        onChanged         : widget.enable && !widget.readOnly ? widget.onChanged : null,
+                        onTap             : widget.enable && !widget.readOnly
+                          ? () {
+                              if(!isExpanded) _portal.show();
+                            }
+                          : null,
                         textInputAction   : .send,
                         textAlignVertical : .center,
-                        cursorWidth : 0.5,
-                        decoration  :
-                        const InputDecoration(
-                          errorStyle     : TextStyle(height: 0),
-                          counterText    : "",
-                          errorMaxLines  : 0,
-                          isDense   : true,
-                          isCollapsed    : true,
-                          contentPadding : .symmetric( vertical: 12, horizontal: 16 ),
-                          fillColor : Colors.white,
-                          border    : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
-                          errorBorder    : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
-                          enabledBorder  : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
-                          focusedBorder  : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
-                          disabledBorder : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
+                        cursorWidth       : 0.5,
+                        readOnly          : !widget.enable || widget.readOnly,
+                        enabled           : widget.enable && !widget.readOnly,
+                        decoration        :
+                        InputDecoration(
+                          hintText              : widget.hint,
+                          errorStyle            : TextStyle(height: 0),
+                          counterText           : "",
+                          errorMaxLines         : 0,
+                          isDense               : true,
+                          isCollapsed           : true,
+                          contentPadding        : .symmetric( vertical: 12, horizontal: 16 ),
+                          fillColor             : widget.enable ? Colors.white : context.disabledColor,
+                          border                : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
+                          errorBorder           : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
+                          enabledBorder         : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
+                          focusedBorder         : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
+                          disabledBorder        : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
                           focusedErrorBorder    : OutlineInputBorder(borderSide: .new(color: Colors.transparent)),
                           suffixIconConstraints : BoxConstraints( maxHeight : 30, minHeight : 30 ),
                           prefixIconConstraints : BoxConstraints( maxHeight : 30, minHeight : 30 ),
@@ -389,10 +392,11 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
                         size    : widget.size,
                       ),
                   ),
+                  if(widget.suffix != null) widget.suffix!,
                   NAsyncLoader(
-                    onLoading  : widget.onLoading,
-                    onFinished : widget.onFinished,
-                    indicator  :
+                    onLoading : widget.onLoading,
+                    onFinished: widget.onFinished,
+                    indicator :
                     Padding(
                       padding : .all(4.5),
                       child   :
@@ -401,24 +405,21 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
                         child     : const CircularProgressIndicator(strokeWidth: 1)
                       )
                     ),
-                    child :
+                    child:
                     widget.readOnly
                     ? const SizedBox(height: 24)
                     : widget.arrow
                       ? AnimatedRotation(
-                        turns    : isExpanded ? 0.5 : 0,
-                        duration : const Duration(milliseconds: 200),
-                        child    :
+                        turns     : isExpanded ? 0.5 : 0,
+                        duration  : const Duration(milliseconds: 200),
+                        child     :
                         Container(
                           alignment : .center,
                           width     : 24,
                           height    : 24,
                           child     :
                           widget.asset != null
-                          ? Image.asset(widget.asset!,
-                            width  : 13,
-                            height : 13,
-                          )
+                          ? Image.asset(widget.asset!, width: 13, height: 13)
                           : const Icon(Icons.arrow_drop_down, size: 20),
                         )
                       )
@@ -436,7 +437,7 @@ class __NDropdownState<T> extends State<_NDropdown<T>> {
           child   :
           Text(
             widget.errorText!,
-            style : const TextStyle(color: Colors.red, fontSize: 12),
+            style: const TextStyle(color: Colors.red, fontSize: 12),
           ),
         ),
       ],
@@ -471,18 +472,18 @@ class _ItemContainerState<T> extends State<_ItemContainer<T>> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      hitTestBehavior : .opaque,
+      hitTestBehavior: .opaque,
       cursor  : SystemMouseCursors.click,
       onEnter : (event) => setState(() => isOver = true  ),
       onExit  : (event) => setState(() => isOver = false ),
       child   :
       GestureDetector(
-        behavior : .opaque,
-        onTap    : () {
+        behavior: .opaque,
+        onTap: () {
           widget.onSelection?.call(widget.item, widget.index);
           widget.onClose();
         },
-        child    :
+        child:
         Container(
           color   : isOver ? context.cardColor.withValues(alpha: 0.5) : context.primaryColor,
           padding : widget.itemPadding ?? const EdgeInsets.all(10),

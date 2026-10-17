@@ -1,110 +1,170 @@
-import 'dart:ui';
-
+// dart
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-/// Device locale language code, resolved without depending on any state-management package.
-class _DeviceLocale {
-  static String get languageCode => PlatformDispatcher.instance.locale.languageCode;
+/// Zona horaria de trabajo de toda la app: `America/Lima` (UTC−5, sin
+/// horario de verano desde 1993).
+///
+/// El backend resuelve la zona una sola vez (`TIMEZONE` del `.env`, hoy
+/// `America/Lima`) y de este lado hacemos lo mismo: un `DateTime` **naive**
+/// (sin zona) dentro de la app siempre significa "reloj de pared de Lima", o
+/// una fecha de calendario (sin hora), que nunca se convierte. Los instantes
+/// absolutos sólo existen en la frontera con la API: al enviar como `Z`
+/// (`toApiIso`) y al recibir con offset (`parseApiDateTime`).
+const Duration _appUtcOffset = Duration(hours: -5);
+
+/// Locale del dispositivo (p. ej. `en`, `es`) para formatear fechas: forma
+/// nativa de Flutter, sin GetX. Reemplaza a `Get.locale?.languageCode`.
+String get _languageCode {
+  final String code =
+      WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+  return code.isEmpty ? 'en' : code;
 }
 
-/// Extension on [DateTime] that adds formatting helpers and comparison utilities.
+/// `DateTime` naive con los campos de [dt] ya en hora de Lima.
+/// Conversión interna de presentación: no consulta la zona del dispositivo.
+DateTime _naive(DateTime dt) => DateTime(
+  dt.year,
+  dt.month,
+  dt.day,
+  dt.hour,
+  dt.minute,
+  dt.second,
+  dt.millisecond,
+  dt.microsecond,
+);
+
+/// "Ahora" en hora de Perú, sin zona: reemplaza a `DateTime.now()` en toda la
+/// app para que "hoy", los filtros, los vencimientos y las fechas por
+/// defecto no dependan de la zona del dispositivo.
+///
+/// Excepción: para marcas de unicidad (`millisecondsSinceEpoch`,
+/// `microsecondsSinceEpoch`, tags de widgets) sigue siendo válido
+/// `DateTime.now()` — son instantes y la zona no cambia el valor.
+DateTime nowApp() => _naive(DateTime.now().toUtc().add(_appUtcOffset));
+
+/// Salida hacia el back HTTP/WS. Enviar datos de fecha siempre con especificación de zona horaria, por ahora se aceptan los datos sin esta especificación pero se debe cambiar en el futuro. Se puede usar este método como base si se desea hacer el cambio en el futuro.
+extension DateTimeApi on DateTime {
+  /// Instante absoluto (UTC) para la API: un `DateTime` naive se interpreta
+  /// como hora de Perú —no como hora del dispositivo— y se convierte a UTC.
+  DateTime get toApiInstant => isUtc
+      ? toUtc()
+      : DateTime.utc(year, month, day, hour, minute, second, millisecond, microsecond)
+          .subtract(_appUtcOffset);
+
+  String get toApiIso => toApiInstant.toIso8601String();
+}
+
+/// Entrada desde el back: devuelve siempre la hora de Perú, sin zona.
+///
+/// El back resuelve la zona una sola vez (`TIMEZONE` del `.env`, hoy
+/// `America/Lima`) y entrega los instantes con su offset explícito, p. ej.
+/// `2026-08-07T13:48:32-05:00` (o `…Z`, el mismo instante en UTC).
+/// `DateTime.parse` normaliza ambos a UTC, y si se formateara con `toLocal()`
+/// la hora terminaría dependiendo de la zona del dispositivo: dos usuarios
+/// verían horas distintas para el mismo registro.
+///
+/// Por eso se convierte el instante al reloj de pared de Lima y se devuelve
+/// naive: los formateadores (`toApp()`) lo dejan tal cual, así que la hora
+/// mostrada es siempre la operacional y los formatos existentes siguen
+/// funcionando sin cambios. Un string **sin** zona se toma tal cual (se asume
+/// que el back ya mandó hora de Lima).
+///
+/// Para comparar contra `nowApp()` también funciona: los dos son naive-Lima.
+// DateTime? parseApiDateTime(String? iso) {
+//   final String? s = iso?.trim();
+//   if (s == null || s.isEmpty) return null;
+//   final DateTime? parsed = DateTime.tryParse(s);
+//   if (parsed == null) return null;
+//   return parsed.isUtc ? _naive(parsed.add(_appUtcOffset)) : parsed;
+// }
+
 extension DateTimeExtension on DateTime {
-  /// Returns `true` when [dateTime] or the date parsed from [json] is before
-  /// or at the same moment as this instance (converted to local time).
+  /// Convierte a reloj de pared de Lima, sin zona: un instante `Z`/offset
+  /// pasa a hora de Perú; un `DateTime` naive ya representa hora de Lima (o
+  /// una fecha de calendario) y no se toca. Sustituye a `toLocal()` en toda
+  /// la app: el resultado no depende de la zona del dispositivo.
+  DateTime toApp() => isUtc ? _naive(add(_appUtcOffset)) : this;
+
   bool isEarlier({DateTime? dateTime, String? json}) {
-    final DateTime now = toLocal();
+    final now = toApp();
 
     if(dateTime != null) return dateTime.isBefore(now) || dateTime.isAtSameMomentAs(now);
 
     if (json != null){
-      DateTime? dt = .tryParse(json);
+      DateTime? dt  = .tryParse(json);
       if (dt != null) return dt.isBefore(now) || dt.isAtSameMomentAs(now);
     }
 
     return false;
   }
 
-  /// Returns `true` when [dateTime] falls on the same calendar day as this instance.
   bool isToday({required DateTime dateTime}) {
-    final DateTime now = toLocal();
+    final now = toApp();
     return dateTime.year == now.year && dateTime.month == now.month && dateTime.day == now.day;
   }
 
-  /// Date formatted as `dd/MM/yyyy` (e.g. `30/05/1989`).
-  String get format => DateFormat("dd/MM/yyyy").format(toLocal());
+  // Retorna una fecha formateada en la forma: 30/05/1989
+  String get format => DateFormat("dd/MM/yyyy").format(toApp());
 
-  /// Date formatted as ISO 8601 calendar date `yyyy-MM-dd` (no time component),
-  /// suitable for query strings and filter values.
-  String get iso8601CalendarDate => DateFormat('yyyy-MM-dd').format(toLocal());
+  /// ISO 8601 solo fecha (`yyyy-MM-dd`), p. ej. query strings y valores de filtro (sin hora).
+  String get iso8601CalendarDate => DateFormat('yyyy-MM-dd').format(toApp());
+  // Retorna una fecha formateada en la forma: 30/05/1989 15:30
+  String get formatWithTime => DateFormat("dd/MM/yyyy HH:mm").format(toApp());
 
-  /// Date and time formatted as `dd/MM/yyyy HH:mm` (e.g. `30/05/1989 15:30`).
-  String get formatWithTime => DateFormat("dd/MM/yyyy HH:mm").format(toLocal());
+  /// Fecha larga localizada ("15 de julio de 2026" / "July 15, 2026"): cabecera de
+  /// los grupos por día del timeline de precios.
+  String get longDate => DateFormat.yMMMMd(_languageCode).format(toApp());
 
-  /// Full weekday + date + month + year in the device locale,
-  /// e.g. `"Monday 30 de May 1989"`, with the weekday and month capitalized.
   String get eeeeddMMMMyyyy {
-    final String date = DateFormat("EEEE dd 'de' MMMM yyyy", _DeviceLocale.languageCode).format(toLocal());
+    final String date = DateFormat("EEEE dd 'de' MMMM yyyy", _languageCode).format(toApp());
     final List<String>list = date.split(" ");
     list[0] = list[0][0].toUpperCase() + list[0].substring(1);
     list[3] = list[3][0].toUpperCase() + list[3].substring(1);
     return list.join(" ");
   }
 
-  /// Full weekday + day + month in the device locale,
-  /// e.g. `"Monday, 30 de May"`, with the weekday and month capitalized.
   String get eeeeddMMMM {
-    final String date = DateFormat("EEEE, dd 'de' MMMM", _DeviceLocale.languageCode).format(toLocal());
+    final String date = DateFormat("EEEE, dd 'de' MMMM", _languageCode).format(toApp());
     final List<String>list = date.split(" ");
     list[0] = list[0][0].toUpperCase() + list[0].substring(1);
     list[3] = list[3][0].toUpperCase() + list[3].substring(1);
     return list.join(" ");
   }
 
-  /// Full month name + year in the device locale, with the month capitalized,
-  /// e.g. `"May 1989"`.
   String get mMMMyyyy {
-    final String date = DateFormat("MMMM yyyy", _DeviceLocale.languageCode).format(toLocal());
+    final String date = DateFormat("MMMM yyyy", _languageCode).format(toApp());
     final List<String>list = date.split(" ");
     list[0] = list[0][0].toUpperCase() + list[0].substring(1);
     return list.join(" ");
   }
 
-  /// Zero-padded day of the month, e.g. `"05"`.
-  String get dd => DateFormat("dd").format(toLocal());
+  String get dd => DateFormat("dd").format(toApp());
 
-  /// Abbreviated weekday name capitalized in the device locale, e.g. `"Mon"`.
   String get eEE {
-    final String day = DateFormat("EEE", _DeviceLocale.languageCode).format(toLocal());
+    final String day = DateFormat("EEE", _languageCode).format(toApp());
     return day[0].toUpperCase() + day.substring(1);
   }
 
-  /// Day number followed by abbreviated weekday in the device locale,
-  /// e.g. `"30 Mon"`.
   String get ddEEE {
-    final String date = DateFormat("dd EEE", _DeviceLocale.languageCode).format(toLocal());
+    final String date = DateFormat("dd EEE", _languageCode).format(toApp());
     final List<String>list = date.split(" ");
     list[1] = list[1][0].toUpperCase() + list[1].substring(1);
     return "${list[0]} ${list[1]}";
   }
 
-  /// Time formatted as 12-hour `hh:mm`, e.g. `"03:45"`.
-  String get hhMM  => DateFormat("hh:mm").format(toLocal());
+  String get hhMM  => DateFormat("hh:mm").format(toApp());
+  String get hHmm  => DateFormat("HH:mm").format(toApp());
 
-  /// Time formatted as 24-hour `HH:mm`, e.g. `"15:45"`.
-  String get hHmm  => DateFormat("HH:mm").format(toLocal());
-
-  /// Full month name capitalized in the device locale, e.g. `"May"`.
   String get mMMM {
-    final String m = DateFormat("MMMM", _DeviceLocale.languageCode).format(toLocal());
+    final m = DateFormat("MMMM", _languageCode).format(toApp());
     return m[0].toUpperCase() + m.substring(1);
   }
 
-  /// Full weekday name capitalized in the device locale, e.g. `"Monday"`.
   String get eeee {
-    final String d = DateFormat("EEEE", _DeviceLocale.languageCode).format(toLocal());
+    final d = DateFormat("EEEE", _languageCode).format(toApp());
     return d[0].toUpperCase() + d.substring(1);
   }
 
-  /// Attempts to parse [value] as a `dd/MM/yyyy` date; returns `null` on failure.
   DateTime? paseOrNull(dynamic value) => DateFormat("dd/MM/yyyy").tryParse(value.toString());
 }

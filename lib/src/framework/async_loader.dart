@@ -40,7 +40,7 @@ class NAsyncLoader extends StatefulWidget {
   /// Si no se define, se usa un CircularProgressIndicator por defecto.
   final Widget? indicator;
 
-  const new({
+  const NAsyncLoader({
     this.onLoading,
     this.onFinished,
     this.onTap,
@@ -52,12 +52,12 @@ class NAsyncLoader extends StatefulWidget {
   });
 
   @override
-  State<NAsyncLoader> createState() => _LoaderState();
+  State<NAsyncLoader> createState() => NAsyncLoaderState();
 }
 
 /// Estado interno encargado de gestionar el ciclo de vida del loading
 /// y la comunicación con el StreamBuilder.
-class _LoaderState extends State<NAsyncLoader> {
+class NAsyncLoaderState extends State<NAsyncLoader> {
   /// Controlador de stream que emite el estado de carga (true = loading).
   StreamController<bool>? streamController;
 
@@ -74,17 +74,27 @@ class _LoaderState extends State<NAsyncLoader> {
   /// Ejecuta la carga inicial si `onLoading` está definido.
   /// Activa el estado de loading y lo desactiva al finalizar.
   Future<void> startLoading() async {
-    if(widget.onLoading != null){
-      if(streamController == null){
-        streamController = StreamController<bool>();
-        setState(()=> streamController?.add(true));
-        await Future(widget.onLoading!)
-        .then((value) { close(); })
-        .then((_) => widget.onFinished?.call())
-        .onError((error, stackTrace) { debugPrint("$error\n\n$stackTrace"); });
-      }
-    } else {
+    if (widget.onLoading == null) {
       close();
+      return;
+    }
+
+    if (streamController != null) return;
+
+    streamController = StreamController<bool>();
+    if (mounted) {
+      setState(() => streamController?.add(true));
+    } else {
+      streamController?.add(true);
+    }
+
+    try {
+      await Future(widget.onLoading!);
+    } catch (error, stackTrace) {
+      debugPrint("$error\n\n$stackTrace");
+    } finally {
+      close();
+      widget.onFinished?.call();
     }
   }
 
@@ -122,6 +132,18 @@ class _LoaderState extends State<NAsyncLoader> {
     }
   }
 
+  /// `true` mientras hay un proceso asíncrono en curso.
+  bool get isLoading => streamController != null;
+
+  /// Dispara [NAsyncLoader.onTap] desde fuera del widget (por ejemplo, al
+  /// presionar Enter en un text field) para reutilizar el loading del tap real
+  /// en vez de duplicar esa lógica en el call site. Se ignora si ya hay un
+  /// proceso en curso, igual que un segundo tap.
+  Future<void> trigger() async {
+    if (isLoading) return;
+    await onTap(ConnectionState.none);
+  }
+
   /// Inicializa el widget y dispara la carga inicial.
   @override
   void initState() {
@@ -156,15 +178,15 @@ class _LoaderState extends State<NAsyncLoader> {
     onExit  : widget.onTap != null ? widget.onExit  : null,
     child   :
     StreamBuilder<bool>(
-      stream  : streamController?.stream,
-      builder : (context, snapshot) =>
+      stream : streamController?.stream,
+      builder: (context, snapshot) =>
       GestureDetector(
-        onTap : widget.onTap == null ? null : () => onTap(snapshot.connectionState),
-        child : snapshot.connectionState == .none
+        onTap: widget.onTap == null ? null : () => onTap(snapshot.connectionState),
+        child: snapshot.connectionState == ConnectionState.none
         ? widget.child
         : widget.indicator ?? Container(
           height    : 60,
-          alignment : .center,
+          alignment : Alignment.center,
           child     :
           const SizedBox.square(
             dimension : 40,

@@ -121,14 +121,14 @@ line, even when it is not a widget.
 ```dart
 // ❌ Wrong
 padding: (type) => EdgeInsets.symmetric(
-  horizontal: type == ScreenType.mobile ? 16 : 40,
+  horizontal: type == NScreenType.mobile ? 16 : 40,
   vertical: 24,
 ),
 
 // ✅ Correct
 padding: (type) =>
 EdgeInsets.symmetric(
-  horizontal : type == ScreenType.mobile ? 16 : 40,
+  horizontal : type == NScreenType.mobile ? 16 : 40,
   vertical   : 24,
 ),
 ```

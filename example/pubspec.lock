@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  dotted_decoration:
+    dependency: transitive
+    description:
+      name: dotted_decoration
+      sha256: "764dbca7467d74c8ba2b359438dc0ed4bd836f48b224f7eae251b027d2d393d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -184,7 +192,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.2"
   path:
     dependency: transitive
     description:

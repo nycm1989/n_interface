@@ -1,8 +1,6 @@
 import 'dart:async' show Future;
 import 'package:flutter/material.dart';
-import 'package:n_interface/src/enums/screen_type.dart' show ScreenType;
-import 'package:n_interface/src/extenssions/box_constraints_extension.dart' show ScreenTypeExtension;
-
+import 'package:n_interface/n_interface.dart' show NScreenType, NScreenTypeExtension;
 
 import 'async_loader.dart' show NAsyncLoader;
 
@@ -10,7 +8,7 @@ import 'async_loader.dart' show NAsyncLoader;
 ///
 /// Widget encargado de construir layouts responsivos basados en el tamaño disponible.
 /// Internamente usa un LayoutBuilder para obtener las restricciones (`BoxConstraints`)
-/// y determinar el tipo de pantalla (`ScreenType`) y orientación (`AxisData`).
+/// y determinar el tipo de pantalla (`NScreenType`) y orientación (`NAxisData`).
 ///
 /// También envuelve el contenido en un `NAsyncLoader`, permitiendo ejecutar lógica asíncrona
 /// antes de renderizar el contenido principal.
@@ -35,9 +33,9 @@ class NResponsiveBuilder extends StatelessWidget {
 
   /// Función opcional que define el padding dinámicamente según el tipo de pantalla.
   ///
-  /// Recibe un `ScreenType` (mobile, tablet, desktop) y retorna un `EdgeInsetsGeometry`.
+  /// Recibe un `NScreenType` (mobile, tablet, desktop) y retorna un `EdgeInsetsGeometry`.
   /// Si no se define, se usa `EdgeInsets.zero`.
-  final EdgeInsetsGeometry Function(ScreenType screenType)? padding;
+  final EdgeInsetsGeometry Function(NScreenType screenType)? padding;
 
   /// Widget opcional que se muestra mientras `onLoading` está en ejecución.
   ///
@@ -49,17 +47,13 @@ class NResponsiveBuilder extends StatelessWidget {
   /// Parámetros:
   /// - `screenType`: Tipo de pantalla calculado (mobile, tablet, desktop).
   /// - `size`: Restricciones actuales del layout (`BoxConstraints`).
-  /// - `axis`: Configuración de orientación (`AxisData`) que indica:
+  /// - `axis`: Configuración de orientación (`NAxisData`) que indica:
   ///     - eje principal (horizontal/vertical)
   ///     - eje secundario
   ///     - si debe expandirse (`expand`)
   ///
   /// Este builder es el núcleo del widget y permite construir layouts adaptativos.
-  final Widget Function(
-    ScreenType screenType,
-    BoxConstraints size,
-    AxisData axis,
-  ) builder;
+  final Widget Function( NScreenType screenType, BoxConstraints size, NAxisData axis ) builder;
 
   const NResponsiveBuilder({
     required this.builder,
@@ -75,32 +69,32 @@ class NResponsiveBuilder extends StatelessWidget {
   Widget build(BuildContext context) =>
   /// El widget se envuelve en `NAsyncLoader` para manejar estados de carga asincrónica.
   NAsyncLoader(
-    onLoading  : onLoading,
-    onFinished : onFinished,
-    indicator  : indicator,
-    child :
+    onLoading   : onLoading,
+    onFinished  : onFinished,
+    indicator   : indicator,
+    child       :
     /// LayoutBuilder permite acceder a las restricciones actuales del contenedor
     /// para construir UI responsiva.
     LayoutBuilder (
       builder : ( context, size ) =>
       /// Se aplica padding dinámico basado en el tipo de pantalla.
       Padding(
-        padding : padding == null ? .zero : padding!(size.getScreenType),
+        padding : padding == null ? .zero : padding!(size.getNScreenType),
         child   :
         /// Se ejecuta el builder principal pasando:
         /// - tipo de pantalla
         /// - tamaño disponible
         /// - configuración de ejes calculada
         builder.call(
-          size.getScreenType,
+          size.getNScreenType,
           size,
           /// Se construye la configuración de ejes en base al breakpoint:
           /// - Vertical si es menor al breakpoint (mobile)
           /// - Horizontal si es mayor o igual (desktop/tablet)
-          AxisData(
-            main   : size.maxWidth <  breakSize ? .vertical   : .horizontal,
-            second : size.maxWidth <  breakSize ? .horizontal : .vertical,
-            expand : size.maxWidth >= breakSize
+          NAxisData(
+            main    : size.maxWidth <  breakSize ? .vertical   : .horizontal,
+            second  : size.maxWidth <  breakSize ? .horizontal : .vertical,
+            expand  : size.maxWidth >= breakSize
           )
         )
       )
@@ -109,7 +103,7 @@ class NResponsiveBuilder extends StatelessWidget {
 }
 
 
-/// AxisData
+/// NAxisData
 ///
 /// Estructura de datos que define cómo se organiza el layout en términos de ejes.
 ///
@@ -131,7 +125,7 @@ class NResponsiveBuilder extends StatelessWidget {
 ///     main   = Axis.horizontal
 ///     second = Axis.vertical
 ///     expand = true
-class AxisData {
+class NAxisData {
   /// Eje principal sobre el cual se organiza el contenido.
   ///
   /// Define si el layout fluye horizontalmente (`Row`) o verticalmente (`Column`).
@@ -148,7 +142,7 @@ class AxisData {
   /// y `false` en mobile donde el contenido suele ser más compacto.
   final bool expand;
 
-  const AxisData({
+  const NAxisData({
     required this.main,
     required this.second,
     required this.expand,

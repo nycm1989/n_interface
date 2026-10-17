@@ -1,5 +1,5 @@
 /// Represents the type of screen based on its size category.
-enum ScreenType{
+enum NScreenType{
   /// Small screen, typically a smartphone.
   mobile,
   /// Medium screen, typically a tablet or small laptop.

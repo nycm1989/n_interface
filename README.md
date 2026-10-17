@@ -228,15 +228,15 @@ Row(
 
 ### NResponsiveBuilder
 
-Builds a layout from the available size, exposing the `ScreenType` (mobile,
+Builds a layout from the available size, exposing the `NScreenType` (mobile,
 tablet, desktop) and an `AxisData` describing the main/secondary axis. It is
 wrapped in an `NAsyncLoader`, so it can run async work before the first frame.
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| `builder` | `Widget Function(ScreenType, BoxConstraints, AxisData)` | required | Main builder. |
+| `builder` | `Widget Function(NScreenType, BoxConstraints, AxisData)` | required | Main builder. |
 | `breakSize` | `double` | `650` | Breakpoint: below → vertical, above → horizontal. |
-| `padding` | `EdgeInsetsGeometry Function(ScreenType)?` | `null` | Dynamic padding. |
+| `padding` | `EdgeInsetsGeometry Function(NScreenType)?` | `null` | Dynamic padding. |
 | `onLoading` / `onFinished` / `indicator` | — | `null` | Loading hooks. |
 
 `AxisData` fields: `main` (`Axis`), `second` (`Axis`), `expand` (`bool`).
@@ -363,7 +363,7 @@ NToast.show(context, message: 'Operation failed', isValid: false, center: true);
 
 | Type | Values / Fields | Description |
 | --- | --- | --- |
-| `ScreenType` | `mobile`, `tablet`, `desktop` | Size category of the current viewport. |
+| `NScreenType` | `mobile`, `tablet`, `desktop` | Size category of the current viewport. |
 | `AxisData` | `main`, `second`, `expand` | Axis configuration produced by `NResponsiveBuilder`. |
 | `NSubMenuAlignment` | `topLeft`, `topRight`, `bottomLeft`, `bottomRight` | Submenu anchor direction. |
 | `NSubMenuItem` | `asset`, `text`, `color`, `tooltip`, `onTap` | Single submenu entry. |
@@ -378,7 +378,7 @@ as you import the library.
 | Extension | On | Highlights |
 | --- | --- | --- |
 | `ContextExtension` | `BuildContext` | `topSize`, `bottomSize`, `pop()`, and theme getters: `primaryColor`, `textColor`, `mainColor`, `successColor`, `errorColor`, `dividerColor`, `cardColor`, `backgroundColor`, `disabledColor`, `overedColor`, `borderColor`, `greyCard`, … |
-| `ScreenTypeExtension` | `BoxConstraints` | `getScreenType` → `ScreenType` from `maxWidth`. |
+| `NScreenTypeExtension` | `BoxConstraints` | `getNScreenType` → `NScreenType` from `maxWidth`. |
 | `DateTimeExtension` | `DateTime` | `isEarlier`, `isToday`, `format` (`dd/MM/yyyy`), `formatWithTime`, `iso8601CalendarDate`, `eee` / `eeeeddMMMM` / `mMMMyyyy` locale formats, `hhMM`, `hHmm`, `paseOrNull`. |
 | `DurationExtension` | `Duration` | `format` (`HH:mm`), `parseOrNull`. |
 | `ListExtension<E>` | `List<E>` | `singleWhereOrNull`, `removeEmpty`. |

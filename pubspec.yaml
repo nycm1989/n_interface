@@ -1,6 +1,6 @@
 name: n_interface
 description: "My personal interface helpers"
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/nycm1989/n_interface
 repository: https://github.com/nycm1989/n_interface
 
@@ -10,6 +10,7 @@ environment:
 
 dependencies:
   animated_toggle_switch: ^0.8.7
+  dotted_decoration: ^3.0.0
   flutter:
     sdk: flutter
   flutter_styled_toast: ^2.3.0

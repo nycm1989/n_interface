@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:n_interface/src/extenssions/context_extension.dart' show ContextExtension;
+import 'package:n_interface/n_interface.dart' show ContextExtension;
 
-/// Visual style variant used internally by [NText].
-enum _Type {
-  /// Standard text style with default color.
+enum _Type{
   normal,
-  /// Emphasized text with a bolder color.
   bold,
-  /// Text styled to look like a button label, using the main theme color.
   button
 }
 
 class NText extends StatelessWidget {
-  final String text;
-  final double size;
-  final FontWeight   weight;
+  final String                text;
+  final double                size;
+  final FontWeight            weight;
   final Color               ? color;
   final TextAlign           ? align;
   final TextOverflow        ? overflow;
@@ -22,6 +18,7 @@ class NText extends StatelessWidget {
   final Shadow              ? shadow;
   final FontStyle           ? style;
   final TextDecoration      ? decoration;
+  final double              ? decorationThickness;
   final int                 ? maxLines;
 
   final _Type _type;
@@ -29,7 +26,7 @@ class NText extends StatelessWidget {
   const NText({
     required this.text,
     this.size   = 12,
-    this.weight = .normal,
+    this.weight = .w300,
     this.color,
     this.align,
     this.margin,
@@ -37,13 +34,14 @@ class NText extends StatelessWidget {
     this.shadow,
     this.style,
     this.decoration,
+    this.decorationThickness,
     this.maxLines,
     super.key,
   }) : _type = .normal;
 
   const NText.bold({
     required this.text,
-    this.size = 12,
+    this.size     = 12,
     this.color,
     this.margin,
     this.align,
@@ -51,15 +49,16 @@ class NText extends StatelessWidget {
     this.shadow,
     this.style,
     this.decoration,
+    this.decorationThickness,
     this.maxLines,
     super.key
   }):
-  _type  = .bold,
-  weight = .w500;
+  _type   = .bold,
+  weight  = .w500;
 
   const NText.button({
     required this.text,
-    this.size = 12,
+    this.size     = 12,
     this.margin,
     this.align,
     this.overflow,
@@ -67,11 +66,12 @@ class NText extends StatelessWidget {
     this.style,
     this.color,
     this.decoration,
+    this.decorationThickness,
     this.maxLines,
     super.key
   }):
-  _type  = .button,
-  weight = .w500;
+  _type   = .button,
+  weight  = .w500;
 
   @override
   Widget build(BuildContext context) =>
@@ -85,17 +85,18 @@ class NText extends StatelessWidget {
       maxLines  : maxLines,
       style     :
       TextStyle(
-        color : color ?? (
+        color     : color ?? (
           _type == .normal  ? context.textColor     :
           _type == .bold    ? context.textBoldColor :
           _type == .button  ? context.mainColor     :
           null
         ),
-        fontStyle  : style,
-        fontSize   : size,
-        fontWeight : weight,
-        decoration : decoration,
-        shadows    : shadow == null ? null : [shadow!]
+        fontStyle : style,
+        fontSize  : size,
+        fontWeight: weight,
+        decoration: decoration,
+        decorationThickness: decorationThickness,
+        shadows   : shadow == null ? null : [shadow!]
       ),
     )
   );
