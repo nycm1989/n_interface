@@ -222,7 +222,7 @@ class _MultiSelectOption extends StatelessWidget {
       Row(
         spacing : 10,
         children: [
-          NCheck(value: isSelected, onNCheck: onToggle),
+          NCheck(value: isSelected, onCheck: onToggle),
           Expanded(
             child:
             NText(

@@ -329,3 +329,66 @@ NDropdown({
   Function()?              onFinished,
 });
 ```
+
+## 12. Use `Row`/`Column` `spacing` instead of intermediate `SizedBox`
+
+`Row` and `Column` already expose a `spacing` property. Use it to separate
+children instead of inserting `SizedBox` widgets (or `Padding`) between them.
+Only keep a `SizedBox` when the gap is irregular (a different size between
+specific children) or when it is not a gap (e.g. `Expanded(child: SizedBox(...))`).
+
+```dart
+// ❌ Wrong
+Column(
+  children: [
+    const NText(text: 'One'),
+    const SizedBox(height: 12),
+    const NText(text: 'Two'),
+  ],
+)
+
+// ✅ Correct
+Column(
+  spacing : 12,
+  children: [
+    const NText(text: 'One'),
+    const NText(text: 'Two'),
+  ],
+)
+```
+
+```dart
+// ❌ Wrong
+Row(
+  children: [
+    const NText(text: 'One'),
+    const SizedBox(width: 8),
+    const NText(text: 'Two'),
+  ],
+)
+
+// ✅ Correct
+Row(
+  spacing : 8,
+  children: [
+    const NText(text: 'One'),
+    const NText(text: 'Two'),
+  ],
+)
+```
+
+## 13. Use `Color.withValues` instead of `Color.withOpacity`
+
+`Color.withOpacity` is deprecated and no longer works as expected. To change a
+color's alpha, use `Color.withValues(alpha: ...)` instead. The alpha is a
+`double` between `0.0` and `1.0`, and the same applies to `Colors` constants.
+
+```dart
+// ❌ Wrong
+Colors.black.withOpacity(0.1);
+color.withOpacity(0.5);
+
+// ✅ Correct
+Colors.black.withValues(alpha: 0.1);
+color.withValues(alpha: 0.5);
+```

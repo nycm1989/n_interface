@@ -56,14 +56,14 @@ class _DemoPageState extends State<DemoPage> {
 
   late final NTextController _name   = NTextController(
     validator :
-    TextFieldValidator.notEmpty(
+    NTextFieldValidator.notEmpty(
       key   : _nameKey,
       error : 'Name is required',
     ),
   );
   late final NTextController _email  = NTextController(
     validator :
-    TextFieldValidator.email(
+    NTextFieldValidator.email(
       key   : _emailKey,
       error : 'Enter a valid email',
     ),
@@ -71,7 +71,7 @@ class _DemoPageState extends State<DemoPage> {
   late final NTextController _amount = NTextController(
     text : '0',
     validator :
-    TextFieldValidator.rangeMinMax(
+    NTextFieldValidator.rangeMinMax(
       key   : _amountKey,
       min   : 1,
       max   : 1000,
@@ -173,7 +173,7 @@ class _DemoPageState extends State<DemoPage> {
 
 class _Header extends StatelessWidget {
   final NScreenType screenType;
-  final AxisData   axis;
+  final NAxisData   axis;
 
   const _Header({
     required this.screenType,
@@ -428,7 +428,7 @@ class _FieldSection extends StatelessWidget {
           type  : TextInputType.emailAddress,
           width : 280,
           prefix     :
-          const TextFieldAction.prefix(icon: Icons.mail_outline),
+          const NTextFieldAction.prefix(icon: Icons.mail_outline),
         ),
         const SizedBox(height: 12),
         NTextField(
@@ -438,7 +438,7 @@ class _FieldSection extends StatelessWidget {
           type  : TextInputType.number,
           width : 280,
           suffix     :
-          TextFieldAction.suffix(
+          NTextFieldAction.suffix(
             icon  : Icons.clear,
             onTap : amount.clear,
           ),
@@ -834,22 +834,6 @@ class _DialogSection extends StatelessWidget {
       spacing    : 10,
       runSpacing : 10,
       children   : [
-        NButton(
-          text  : 'Open dialog',
-          onTap : () {
-            CreateDialog.make(
-              context,
-              title : 'Create record',
-              maxWidth    : 460,
-              onDismissed : () => debugPrint('Dialog dismissed'),
-              child :
-              _CreateRecordDialog(
-                controller : controller,
-                onConfirm  : () => onToast('Record created'),
-              ),
-            );
-          },
-        ),
         NButton.white(
           text  : 'Success toast',
           onTap : () => onToast('Saved successfully'),
@@ -860,61 +844,6 @@ class _DialogSection extends StatelessWidget {
             isValid : false,
             center  : true,
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-class _CreateRecordDialog extends StatelessWidget {
-  final NTextController controller;
-  final VoidCallback    onConfirm;
-
-  const _CreateRecordDialog({
-    required this.controller,
-    required this.onConfirm,
-  });
-
-  @override
-  Widget build(BuildContext context) =>
-  Padding(
-    padding : const EdgeInsets.all(16),
-    child   :
-    Column(
-      mainAxisSize : MainAxisSize.min,
-      crossAxisAlignment : CrossAxisAlignment.stretch,
-      children     : [
-        NText(
-          text    : 'Dialog content is fully themed and responsive. On mobile it opens '
-              'as a drag-to-dismiss bottom sheet.',
-          size    : 13,
-        ),
-        const SizedBox(height: 16),
-        NTextField(
-          title : 'Record name',
-          hint  : 'e.g. Invoice #1',
-          controller : controller,
-        ),
-        const SizedBox(height: 20),
-        Row(
-          children : [
-            NFlexibleBox(
-              expandWhen : true,
-              child :
-              NButton(
-                text  : 'Create',
-                onTap : () {
-                  context.pop();
-                  onConfirm();
-                },
-              ),
-            ),
-            const SizedBox(width: 8),
-            NButton.flat(
-              text  : 'Cancel',
-              onTap : () => context.pop(),
-            ),
-          ],
         ),
       ],
     ),

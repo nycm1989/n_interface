@@ -18,7 +18,7 @@ class NCheck extends StatefulWidget {
   final double        size;
   final int?          maxLines;
   final TextOverflow? overflow;
-  final GestureTapCallback? onNCheck;
+  final GestureTapCallback? onCheck;
   final EdgeInsetsGeometry? margin;
 
   const NCheck({
@@ -34,7 +34,7 @@ class NCheck extends StatefulWidget {
     this.overflow,
     this.title,
     this.text,
-    this.onNCheck,
+    this.onCheck,
     this.margin,
   });
 
@@ -116,7 +116,7 @@ class _NCheckAnimatedShapeState extends State<NCheck> with SingleTickerProviderS
                   dimension : 20,
                   child     :
                   NAsyncLoader(
-                    onTap     : widget.readOnly || widget.blocked? null : widget.onNCheck,
+                    onTap     : widget.readOnly || widget.blocked? null : widget.onCheck,
                     indicator :
                     Padding(
                       padding : const .all(2),
@@ -135,13 +135,13 @@ class _NCheckAnimatedShapeState extends State<NCheck> with SingleTickerProviderS
                         progress        : _progress!.value,
                         color           : widget.blocked ? disabledColor : _colorAnimation!.value ?? context.borderColor,
                         borderColor     : widget.readOnly || widget.blocked ? disabledColor : widget.value ? context.borderColor : disabledColor,
-                        backgroundColor : widget.onNCheck == null ? const Color(0xFFdbdbdb) : context.primaryColor
+                        backgroundColor : widget.onCheck == null ? const Color(0xFFdbdbdb) : context.primaryColor
                       )
                       : CheckPainter(
                         progress        : _progress!.value,
                         color           : widget.blocked ? disabledColor : _colorAnimation!.value ?? context.borderColor,
                         borderColor     : widget.readOnly || widget.blocked ? disabledColor : widget.value ? context.borderColor : disabledColor,
-                        backgroundColor : widget.onNCheck == null ? const Color(0xFFdbdbdb): context.primaryColor
+                        backgroundColor : widget.onCheck == null ? const Color(0xFFdbdbdb): context.primaryColor
                       )
                     ),
                   ),

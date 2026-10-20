@@ -181,8 +181,9 @@ class NAsyncLoaderState extends State<NAsyncLoader> {
       stream : streamController?.stream,
       builder: (context, snapshot) =>
       GestureDetector(
-        onTap: widget.onTap == null ? null : () => onTap(snapshot.connectionState),
-        child: snapshot.connectionState == ConnectionState.none
+        behavior : widget.onTap != null ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+        onTap    : widget.onTap == null ? null : () => onTap(snapshot.connectionState),
+        child    : snapshot.connectionState == ConnectionState.none
         ? widget.child
         : widget.indicator ?? Container(
           height    : 60,
