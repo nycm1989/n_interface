@@ -103,7 +103,21 @@ extension DateTimeExtension on DateTime {
   String get formatWithTime => DateFormat("dd/MM/yyyy HH:mm").format(toApp());
 
   /// Hora fon formato local
-  String get toIso8601WithOffset => DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSxxx").format(this);
+  String toIso8601WithOffset() {
+    final duration = timeZoneOffset;
+    if (duration.isNegative) {
+      return "${toIso8601String()}-${_formatDuration(duration.abs())}";
+    } else {
+      return "${toIso8601String()}+${_formatDuration(duration)}";
+    }
+  }
+
+  String _formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(d.inHours);
+    final minutes = twoDigits(d.inMinutes.remainder(60));
+    return "$hours:$minutes";
+  }
 
   /// Fecha larga localizada ("15 de julio de 2026" / "July 15, 2026"): cabecera de
   /// los grupos por día del timeline de precios.

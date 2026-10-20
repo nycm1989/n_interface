@@ -1,3 +1,6 @@
+## 0.0.4
+* New datetime formatters
+
 ## 0.0.3+3
 * New datetime formatters
 

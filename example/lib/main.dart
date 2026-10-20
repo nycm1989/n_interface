@@ -761,7 +761,7 @@ class _ExtensionsSection extends StatelessWidget {
           const Duration(
             hours   : 2,
             minutes : 5,
-          ).format,
+          ).hhmm,
         ),
         _KeyValueRow(
           label : '"" .clearString()',
