@@ -1,6 +1,6 @@
 name: n_interface
 description: "My personal interface helpers"
-version: 0.0.3+2
+version: 0.0.3+3
 homepage: https://github.com/nycm1989/n_interface
 repository: https://github.com/nycm1989/n_interface
 
@@ -78,3 +78,5 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+
+# dart pub publish --dry-run

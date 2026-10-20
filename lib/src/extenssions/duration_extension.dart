@@ -1,7 +1,17 @@
 /// Extension on [Duration] that adds formatting and parsing helpers.
 extension DurationExtension on Duration {
   /// Returns the duration as a zero-padded `HH:mm` string, e.g. `"02:05"`.
-  String get format {
+  String get hhmm {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+
+    String hours   = twoDigits(inHours);
+    String minutes = twoDigits(inMinutes.remainder(60));
+
+    return "$hours:$minutes";
+  }
+
+/// Returns the duration as a zero-padded `HH:mm` string, e.g. `"02:05"`.
+  String get hhmmss {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
 
     String hours   = twoDigits(inHours);

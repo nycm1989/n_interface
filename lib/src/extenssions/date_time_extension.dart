@@ -98,8 +98,12 @@ extension DateTimeExtension on DateTime {
 
   /// ISO 8601 solo fecha (`yyyy-MM-dd`), p. ej. query strings y valores de filtro (sin hora).
   String get iso8601CalendarDate => DateFormat('yyyy-MM-dd').format(toApp());
+
   // Retorna una fecha formateada en la forma: 30/05/1989 15:30
   String get formatWithTime => DateFormat("dd/MM/yyyy HH:mm").format(toApp());
+
+  /// Hora fon formato local
+  String get toIso8601WithOffset => DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSxxx").format(this);
 
   /// Fecha larga localizada ("15 de julio de 2026" / "July 15, 2026"): cabecera de
   /// los grupos por día del timeline de precios.
@@ -143,7 +147,9 @@ extension DateTimeExtension on DateTime {
   }
 
   String get hhMM  => DateFormat("hh:mm").format(toApp());
+  String get hhMMss  => DateFormat("hh:mm:ss").format(toApp());
   String get hHmm  => DateFormat("HH:mm").format(toApp());
+  String get hHmmss  => DateFormat("HH:mm:ss").format(toApp());
 
   String get mMMM {
     final m = DateFormat("MMMM", _languageCode).format(toApp());
